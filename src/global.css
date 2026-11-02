@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+/* layered so tailwind utilities still win over the xp element styles */
+@import 'xp.css/dist/XP.css' layer(components);
+
+@theme {
+  --color-desktop: #004e98;
+}
