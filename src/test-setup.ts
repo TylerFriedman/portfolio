@@ -4,3 +4,6 @@ import { afterEach } from 'vitest';
 
 // testing library only cleans up on its own when vitest globals are on
 afterEach(cleanup);
+
+// jsdom has no pointer capture so every drag would throw without this
+Element.prototype.setPointerCapture = () => {};

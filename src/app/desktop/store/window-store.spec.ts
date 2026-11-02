@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import type { ProgramId } from './types';
+import type { ProgramId } from '../../../programs/registry';
 import { useWindowStore } from './window-store';
 
 const actions = () => useWindowStore.getState().actions;
@@ -69,5 +69,25 @@ describe('window store', () => {
     actions().focus('about');
 
     expect(windowFor('about')).toMatchObject({ isMinimized: false, isMaximized: true });
+  });
+
+  it('keeps the title bar on screen when a window is dragged past the edge', () => {
+    actions().open('about');
+
+    actions().move('about', -5000, -5000);
+    const dragged = windowFor('about');
+    expect(dragged?.y).toBe(0);
+    expect((dragged?.x ?? 0) + (dragged?.width ?? 0)).toBeGreaterThan(0);
+
+    actions().move('about', 5000, 5000);
+    expect(windowFor('about')?.x).toBeLessThan(window.innerWidth);
+    expect(windowFor('about')?.y).toBeLessThan(window.innerHeight);
+  });
+
+  it('never shrinks a window below its minimum size', () => {
+    actions().open('about');
+    actions().resize('about', 10, 10);
+
+    expect(windowFor('about')).toMatchObject({ width: 200, height: 120 });
   });
 });

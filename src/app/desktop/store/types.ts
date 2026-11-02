@@ -1,4 +1,4 @@
-export type ProgramId = 'about' | 'resume' | 'projects' | 'contact';
+import type { ProgramId } from '../../../programs/registry';
 
 export interface DesktopWindow {
   id: ProgramId;

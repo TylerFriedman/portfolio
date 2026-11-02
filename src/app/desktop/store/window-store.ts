@@ -1,12 +1,24 @@
 import { create } from 'zustand';
-import type { DesktopWindow, ProgramId, WindowStore } from './types';
+import type { ProgramId } from '../../../programs/registry';
+import type { DesktopWindow, WindowStore } from './types';
 
 const CASCADE_STEP = 24;
 const DEFAULT_WIDTH = 480;
 const DEFAULT_HEIGHT = 360;
+const MIN_WIDTH = 200;
+const MIN_HEIGHT = 120;
+const VISIBLE_EDGE = 48;
 
-function patch(windows: DesktopWindow[], id: ProgramId, changes: Partial<DesktopWindow>) {
-  return windows.map((w) => (w.id === id ? { ...w, ...changes } : w));
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function patch(
+  windows: DesktopWindow[],
+  id: ProgramId,
+  change: (w: DesktopWindow) => Partial<DesktopWindow>,
+) {
+  return windows.map((w) => (w.id === id ? { ...w, ...change(w) } : w));
 }
 
 function without(focusOrder: ProgramId[], id: ProgramId) {
@@ -22,7 +34,7 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
       set((s) => {
         // offset each new window so it never lands exactly on top of the last one
         const offset = CASCADE_STEP * (s.windows.length + 1);
-        const window: DesktopWindow = {
+        const opened: DesktopWindow = {
           id,
           x: offset,
           y: offset,
@@ -31,7 +43,7 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
           isMinimized: false,
           isMaximized: false,
         };
-        return { windows: [...s.windows, window], focusOrder: [...s.focusOrder, id] };
+        return { windows: [...s.windows, opened], focusOrder: [...s.focusOrder, id] };
       });
     },
     close: (id) =>
@@ -41,22 +53,32 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
       })),
     focus: (id) =>
       set((s) => ({
-        windows: patch(s.windows, id, { isMinimized: false }),
+        windows: patch(s.windows, id, () => ({ isMinimized: false })),
         focusOrder: [...without(s.focusOrder, id), id],
       })),
     // sent to the bottom so the window underneath takes focus
     minimize: (id) =>
       set((s) => ({
-        windows: patch(s.windows, id, { isMinimized: true }),
+        windows: patch(s.windows, id, () => ({ isMinimized: true })),
         focusOrder: [id, ...without(s.focusOrder, id)],
       })),
     toggleMaximize: (id) =>
+      set((s) => ({ windows: patch(s.windows, id, (w) => ({ isMaximized: !w.isMaximized })) })),
+    // keeps enough of the title bar on screen to drag the window back
+    move: (id, x, y) =>
       set((s) => ({
-        windows: s.windows.map((w) => (w.id === id ? { ...w, isMaximized: !w.isMaximized } : w)),
+        windows: patch(s.windows, id, (w) => ({
+          x: clamp(x, VISIBLE_EDGE - w.width, window.innerWidth - VISIBLE_EDGE),
+          y: clamp(y, 0, window.innerHeight - VISIBLE_EDGE),
+        })),
       })),
-    move: (id, x, y) => set((s) => ({ windows: patch(s.windows, id, { x, y }) })),
     resize: (id, width, height) =>
-      set((s) => ({ windows: patch(s.windows, id, { width, height }) })),
+      set((s) => ({
+        windows: patch(s.windows, id, () => ({
+          width: Math.max(width, MIN_WIDTH),
+          height: Math.max(height, MIN_HEIGHT),
+        })),
+      })),
   },
 }));
 

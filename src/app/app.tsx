@@ -1,3 +1,5 @@
+import { Desktop } from './desktop/desktop';
+
 export function App() {
-  return <main className="bg-desktop h-dvh" />;
+  return <Desktop />;
 }
