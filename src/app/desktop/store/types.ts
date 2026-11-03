@@ -10,12 +10,12 @@ export interface DesktopWindow {
   isMaximized: boolean;
 }
 
-export interface WindowState {
+interface WindowState {
   windows: DesktopWindow[];
   focusOrder: ProgramId[];
 }
 
-export interface WindowActions {
+interface WindowActions {
   open: (id: ProgramId) => void;
   close: (id: ProgramId) => void;
   focus: (id: ProgramId) => void;

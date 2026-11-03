@@ -16,10 +16,9 @@ export function DesktopIcon({
   onOpen,
 }: Readonly<DesktopIconProps>) {
   return (
-    // resets the xp.css button chrome so only the icon and label show
     <button
       type="button"
-      className="group flex min-h-0 w-19 min-w-0 flex-col items-center gap-1 rounded-none border-0 bg-transparent bg-none p-0 shadow-none outline-none"
+      className="button-reset group flex w-19 flex-col items-center gap-1"
       onClick={onSelect}
       onDoubleClick={onOpen}
       onKeyDown={(event) => {

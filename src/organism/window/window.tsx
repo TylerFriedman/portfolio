@@ -10,6 +10,7 @@ export interface WindowProps {
   width: number;
   height: number;
   zIndex: number;
+  isActive: boolean;
   isMinimized: boolean;
   isMaximized: boolean;
   children: ReactNode;
@@ -29,6 +30,7 @@ export function Window({
   width,
   height,
   zIndex,
+  isActive,
   isMinimized,
   isMaximized,
   children,
@@ -46,17 +48,20 @@ export function Window({
   }
 
   return (
-    <section
-      role="dialog"
+    <dialog
       aria-label={title}
-      // hidden rather than unmounted so a program keeps its state while minimized
-      hidden={isMinimized}
-      className={clsx('window absolute flex flex-col', isMaximized && 'inset-0')}
+      // closed rather than unmounted so a program keeps its state while minimized
+      open={!isMinimized}
+      // flex only while open as it would override the browser hiding a closed dialog
+      className={clsx('window absolute flex-col open:flex', isMaximized && 'inset-0 size-full')}
       style={isMaximized ? { zIndex } : { zIndex, left: x, top: y, width, height }}
       onPointerDown={onFocus}
     >
       <div
-        className="title-bar box-content touch-none select-none"
+        className={clsx(
+          'title-bar box-content touch-none select-none',
+          !isActive && 'brightness-125 saturate-50',
+        )}
         onPointerDown={handleTitleBarPointerDown}
         onDoubleClick={onToggleMaximize}
       >
@@ -68,7 +73,7 @@ export function Window({
             draggable={false}
             className="size-4"
           />
-          {title}
+          <span>{title}</span>
         </div>
         <div className="title-bar-controls">
           <button type="button" aria-label="Minimize" onClick={onMinimize} />
@@ -88,6 +93,6 @@ export function Window({
           onPointerDown={(event) => trackDrag(event, (dx, dy) => onResize(width + dx, height + dy))}
         />
       )}
-    </section>
+    </dialog>
   );
 }

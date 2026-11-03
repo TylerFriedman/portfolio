@@ -8,6 +8,7 @@ const DEFAULT_HEIGHT = 360;
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
 const VISIBLE_EDGE = 48;
+const TASKBAR_HEIGHT = 30;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -30,7 +31,10 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
   focusOrder: [],
   actions: {
     open: (id) => {
-      if (get().windows.some((w) => w.id === id)) return get().actions.focus(id);
+      if (get().windows.some((w) => w.id === id)) {
+        get().actions.focus(id);
+        return;
+      }
       set((s) => {
         // offset each new window so it never lands exactly on top of the last one
         const offset = CASCADE_STEP * (s.windows.length + 1);
@@ -69,7 +73,7 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
       set((s) => ({
         windows: patch(s.windows, id, (w) => ({
           x: clamp(x, VISIBLE_EDGE - w.width, window.innerWidth - VISIBLE_EDGE),
-          y: clamp(y, 0, window.innerHeight - VISIBLE_EDGE),
+          y: clamp(y, 0, window.innerHeight - TASKBAR_HEIGHT - VISIBLE_EDGE),
         })),
       })),
     resize: (id, width, height) =>
@@ -84,4 +88,11 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
 
 export function useWindowActions() {
   return useWindowStore((s) => s.actions);
+}
+
+export function useActiveWindowId() {
+  return useWindowStore((s) => {
+    const top = s.windows.find((w) => w.id === s.focusOrder.at(-1));
+    return top && !top.isMinimized ? top.id : null;
+  });
 }

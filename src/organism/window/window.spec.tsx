@@ -21,6 +21,7 @@ function renderWindow(props: Partial<WindowProps> = {}) {
       width={400}
       height={300}
       zIndex={1}
+      isActive
       isMinimized={false}
       isMaximized={false}
       {...handlers}

@@ -1,6 +1,7 @@
+import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { ProgramId } from '../../../programs/registry';
-import { useWindowStore } from './window-store';
+import { useActiveWindowId, useWindowStore } from './window-store';
 
 const actions = () => useWindowStore.getState().actions;
 const windowFor = (id: ProgramId) => useWindowStore.getState().windows.find((w) => w.id === id);
@@ -71,17 +72,20 @@ describe('window store', () => {
     expect(windowFor('about')).toMatchObject({ isMinimized: false, isMaximized: true });
   });
 
-  it('keeps the title bar on screen when a window is dragged past the edge', () => {
+  it('keeps 48px of a window on screen when it is dragged past the edge', () => {
     actions().open('about');
 
     actions().move('about', -5000, -5000);
     const dragged = windowFor('about');
     expect(dragged?.y).toBe(0);
-    expect((dragged?.x ?? 0) + (dragged?.width ?? 0)).toBeGreaterThan(0);
+    expect((dragged?.x ?? 0) + (dragged?.width ?? 0)).toBe(48);
 
+    // the bottom limit also clears the 30px taskbar
     actions().move('about', 5000, 5000);
-    expect(windowFor('about')?.x).toBeLessThan(window.innerWidth);
-    expect(windowFor('about')?.y).toBeLessThan(window.innerHeight);
+    expect(windowFor('about')).toMatchObject({
+      x: window.innerWidth - 48,
+      y: window.innerHeight - 30 - 48,
+    });
   });
 
   it('never shrinks a window below its minimum size', () => {
@@ -89,5 +93,28 @@ describe('window store', () => {
     actions().resize('about', 10, 10);
 
     expect(windowFor('about')).toMatchObject({ width: 200, height: 120 });
+  });
+
+  it('treats the front window as the active one', () => {
+    const { result } = renderHook(() => useActiveWindowId());
+
+    act(() => {
+      actions().open('about');
+      actions().open('resume');
+      actions().focus('about');
+    });
+
+    expect(result.current).toBe('about');
+  });
+
+  it('has no active window once every window is minimized', () => {
+    const { result } = renderHook(() => useActiveWindowId());
+
+    act(() => {
+      actions().open('about');
+      actions().minimize('about');
+    });
+
+    expect(result.current).toBeNull();
   });
 });
