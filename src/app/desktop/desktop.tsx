@@ -1,24 +1,43 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
+import wallpaper from '../../assets/wallpaper.webp';
+import { DesktopIcon } from '../../organism/desktop-icon/desktop-icon';
 import { Window } from '../../organism/window/window';
-import { PROGRAMS } from '../../programs/registry';
+import { PROGRAM_IDS, PROGRAMS, type ProgramId } from '../../programs/registry';
 import { useWindowActions, useWindowStore } from './store/window-store';
 
 export function Desktop() {
   const windows = useWindowStore((s) => s.windows);
   const focusOrder = useWindowStore((s) => s.focusOrder);
   const { open, focus, minimize, toggleMaximize, close, move, resize } = useWindowActions();
-
-  // placeholder until desktop icons can open programs
-  useEffect(() => {
-    open('about');
-  }, [open]);
+  const [selectedId, setSelectedId] = useState<ProgramId | null>(null);
 
   return (
     <main className="bg-desktop relative h-dvh overflow-hidden">
+      <img src={wallpaper} alt="" className="absolute inset-0 size-full object-cover" />
+      <ul
+        // relative so the icons paint above the wallpaper image
+        className="relative flex h-full flex-col flex-wrap content-start gap-4 p-2"
+        onPointerDown={(event) => {
+          if (event.target === event.currentTarget) setSelectedId(null);
+        }}
+      >
+        {PROGRAM_IDS.map((id) => (
+          <li key={id}>
+            <DesktopIcon
+              label={PROGRAMS[id].title}
+              icon={PROGRAMS[id].icon}
+              isSelected={id === selectedId}
+              onSelect={() => setSelectedId(id)}
+              onOpen={() => open(id)}
+            />
+          </li>
+        ))}
+      </ul>
       {windows.map((w) => (
         <Window
           key={w.id}
           title={PROGRAMS[w.id].title}
+          icon={PROGRAMS[w.id].icon}
           x={w.x}
           y={w.y}
           width={w.width}

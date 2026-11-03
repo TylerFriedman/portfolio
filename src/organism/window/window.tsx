@@ -4,6 +4,7 @@ import { trackDrag } from '../../utils/track-drag';
 
 export interface WindowProps {
   title: string;
+  icon: string;
   x: number;
   y: number;
   width: number;
@@ -22,6 +23,7 @@ export interface WindowProps {
 
 export function Window({
   title,
+  icon,
   x,
   y,
   width,
@@ -58,7 +60,16 @@ export function Window({
         onPointerDown={handleTitleBarPointerDown}
         onDoubleClick={onToggleMaximize}
       >
-        <div className="title-bar-text">{title}</div>
+        <div className="title-bar-text flex items-center gap-1">
+          <img
+            src={icon}
+            alt=""
+            // a native image drag would cancel the pointer drag of the window
+            draggable={false}
+            className="size-4"
+          />
+          {title}
+        </div>
         <div className="title-bar-controls">
           <button type="button" aria-label="Minimize" onClick={onMinimize} />
           <button
