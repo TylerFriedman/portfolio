@@ -3,12 +3,26 @@
 @import 'xp.css/dist/XP.css' layer(components);
 
 @theme {
+  --font-start: 'Segoe UI', 'Trebuchet MS', sans-serif;
+
   --color-desktop: #004e98;
   --color-highlight: #316ac5;
-  --color-taskbar: #245edb;
-  --color-taskbar-light: #3f8cf3;
-  --color-start: #388e2f;
-  --color-start-light: #5ab64e;
+  --color-taskbar-button: #3c81f3;
+  --color-taskbar-button-hover: #53a3ff;
+  --color-taskbar-button-active: #1e52b7;
+  --color-tray-border: #1042af;
+  --color-start-menu: #4282d6;
+  --color-start-menu-border: #385de7;
+  --color-start-menu-accent: #da884a;
+  --color-start-menu-side: #cbe3ff;
+
+  --shadow-taskbar-button: inset -1px 0 rgb(0 0 0 / 0.3), inset 1px 1px 1px rgb(255 255 255 / 0.2);
+  --shadow-taskbar-button-active:
+    inset 0 0 1px 1px rgb(0 0 0 / 0.2), inset 1px 0 1px rgb(0 0 0 / 0.7);
+  --shadow-tray: inset 1px 0 1px #18bbff;
+  --shadow-start-menu: 2px 4px 2px rgb(0 0 0 / 0.5);
+
+  --text-shadow-start: 1px 1px 2px rgb(0 0 0 / 0.6);
 }
 
 @utility button-reset {
@@ -20,4 +34,91 @@
   background: none;
   box-shadow: none;
   outline: none;
+}
+
+@utility bg-taskbar {
+  background-image: linear-gradient(
+    #1f2f86 0%,
+    #3165c4 3%,
+    #3682e5 6%,
+    #4490e6 10%,
+    #3883e5 12%,
+    #2b71e0 15%,
+    #2663da 18%,
+    #235bd6 20%,
+    #2157d6 38%,
+    #245ddb 54%,
+    #2562df 86%,
+    #2158d4 92%,
+    #1d4ec0 95%,
+    #1941a5 98%
+  );
+}
+
+@utility bg-taskbar-tray {
+  background-image: linear-gradient(
+    #0c59b9 1%,
+    #139ee9 6%,
+    #18b5f2 10%,
+    #139beb 14%,
+    #1290e8 19%,
+    #0d8dea 63%,
+    #0d9ff1 81%,
+    #119be9 91%,
+    #137ed7 97%,
+    #095bc9 100%
+  );
+}
+
+@utility bg-start-button {
+  background-image:
+    linear-gradient(
+      to right,
+      rgb(0 0 0 / 0.3),
+      transparent 3px,
+      transparent calc(100% - 14px),
+      rgb(0 0 0 / 0.45)
+    ),
+    linear-gradient(
+      #377d38 0%,
+      #61a562 5%,
+      #6db06d 8%,
+      #64aa64 12%,
+      #4d9f4c 16%,
+      #3e9a3e 21%,
+      #3b973b 24%,
+      #41a141 35%,
+      #46aa46 47%,
+      #48af48 69%,
+      #46aa46 81%,
+      #42a142 88%,
+      #3b8b3c 95%,
+      #30773f 100%
+    );
+}
+
+@utility bg-start-menu-header {
+  background-image: linear-gradient(
+    #1868ce 0%,
+    #0e60cb 12%,
+    #0e60cb 20%,
+    #1667cf 33%,
+    #1e70d9 54%,
+    #297ae0 65%,
+    #3786e5 79%,
+    #4791eb 100%
+  );
+}
+
+@utility bg-start-menu-footer {
+  background-image: linear-gradient(
+    #4282d6 0%,
+    #418ae3 5%,
+    #418ae3 17%,
+    #3482e3 29%,
+    #2374df 49%,
+    #196edb 62%,
+    #1468d5 75%,
+    #0f61cb 88%
+  );
 }
