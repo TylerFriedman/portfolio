@@ -23,15 +23,13 @@ interface WindowStore {
     minimize: (id: ProgramId) => void;
     toggleMaximize: (id: ProgramId) => void;
     move: (id: ProgramId, x: number, y: number) => void;
-    resize: (id: ProgramId, width: number, height: number) => void;
+    resize: (id: ProgramId, bounds: Pick<DesktopWindow, 'x' | 'y' | 'width' | 'height'>) => void;
   };
 }
 
 const CASCADE_STEP = 24;
 const DEFAULT_WIDTH = 480;
 const DEFAULT_HEIGHT = 360;
-const MIN_WIDTH = 200;
-const MIN_HEIGHT = 120;
 const VISIBLE_EDGE = 48;
 
 function patch(
@@ -99,13 +97,14 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
           })),
         };
       }),
-    resize: (id, width, height) =>
-      set((s) => ({
-        windows: patch(s.windows, id, () => ({
-          width: Math.max(width, MIN_WIDTH),
-          height: Math.max(height, MIN_HEIGHT),
-        })),
-      })),
+    // the top edge stops at the top of the desktop so the title bar stays in reach
+    resize: (id, { x, y, width, height }) =>
+      set((s) => {
+        const top = Math.max(y, 0);
+        return {
+          windows: patch(s.windows, id, () => ({ x, y: top, width, height: height + y - top })),
+        };
+      }),
   },
 }));
 

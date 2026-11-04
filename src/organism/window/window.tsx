@@ -2,13 +2,31 @@ import clsx from 'clsx';
 import type { PointerEvent, ReactNode } from 'react';
 import { trackDrag } from '../../utils/track-drag';
 
-export interface WindowProps {
-  title: string;
-  icon: string;
+interface Bounds {
   x: number;
   y: number;
   width: number;
   height: number;
+}
+
+const MIN_WIDTH = 200;
+const MIN_HEIGHT = 120;
+
+// x and y say which way each handle grows the window, corners come last so they sit above the edges
+const RESIZE_HANDLES = [
+  { edge: 'top', x: 0, y: -1, className: 'inset-x-2 -top-1 h-2 cursor-ns-resize' },
+  { edge: 'right', x: 1, y: 0, className: 'inset-y-2 -right-1 w-2 cursor-ew-resize' },
+  { edge: 'bottom', x: 0, y: 1, className: 'inset-x-2 -bottom-1 h-2 cursor-ns-resize' },
+  { edge: 'left', x: -1, y: 0, className: 'inset-y-2 -left-1 w-2 cursor-ew-resize' },
+  { edge: 'top-left', x: -1, y: -1, className: '-top-1 -left-1 size-3 cursor-nwse-resize' },
+  { edge: 'top-right', x: 1, y: -1, className: '-top-1 -right-1 size-3 cursor-nesw-resize' },
+  { edge: 'bottom-right', x: 1, y: 1, className: '-right-1 -bottom-1 size-3 cursor-nwse-resize' },
+  { edge: 'bottom-left', x: -1, y: 1, className: '-bottom-1 -left-1 size-3 cursor-nesw-resize' },
+] as const;
+
+export interface WindowProps extends Bounds {
+  title: string;
+  icon: string;
   zIndex: number;
   isActive: boolean;
   isMinimized: boolean;
@@ -19,7 +37,7 @@ export interface WindowProps {
   onToggleMaximize: () => void;
   onClose: () => void;
   onMove: (x: number, y: number) => void;
-  onResize: (width: number, height: number) => void;
+  onResize: (bounds: Bounds) => void;
 }
 
 export function Window({
@@ -45,6 +63,20 @@ export function Window({
     // capturing the pointer from a button would swallow its click
     if (isMaximized || (event.target instanceof Element && event.target.closest('button'))) return;
     trackDrag(event, (dx, dy) => onMove(x + dx, y + dy));
+  }
+
+  function handleResizePointerDown(event: PointerEvent<HTMLElement>, dirX: number, dirY: number) {
+    trackDrag(event, (dx, dy) => {
+      const newWidth = Math.max(MIN_WIDTH, width + dirX * dx);
+      const newHeight = Math.max(MIN_HEIGHT, height + dirY * dy);
+      // a top or left edge moves the window so the opposite edge stays where it is
+      onResize({
+        x: dirX < 0 ? x + width - newWidth : x,
+        y: dirY < 0 ? y + height - newHeight : y,
+        width: newWidth,
+        height: newHeight,
+      });
+    });
   }
 
   return (
@@ -86,13 +118,15 @@ export function Window({
         </div>
       </div>
       <div className="window-body flex-1 overflow-auto">{children}</div>
-      {!isMaximized && (
-        <div
-          data-testid="resize-handle"
-          className="absolute right-0 bottom-0 size-3 cursor-se-resize touch-none"
-          onPointerDown={(event) => trackDrag(event, (dx, dy) => onResize(width + dx, height + dy))}
-        />
-      )}
+      {!isMaximized &&
+        RESIZE_HANDLES.map((handle) => (
+          <div
+            key={handle.edge}
+            data-testid={`resize-${handle.edge}`}
+            className={clsx('absolute touch-none', handle.className)}
+            onPointerDown={(event) => handleResizePointerDown(event, handle.x, handle.y)}
+          />
+        ))}
     </dialog>
   );
 }

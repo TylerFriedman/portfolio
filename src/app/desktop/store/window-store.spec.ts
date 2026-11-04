@@ -88,11 +88,11 @@ describe('window store', () => {
     });
   });
 
-  it('never shrinks a window below its minimum size', () => {
+  it('stops the top edge at the top of the desktop without moving the bottom', () => {
     actions().open('about');
-    actions().resize('about', 10, 10);
+    actions().resize('about', { x: 24, y: -50, width: 480, height: 434 });
 
-    expect(windowFor('about')).toMatchObject({ width: 200, height: 120 });
+    expect(windowFor('about')).toMatchObject({ y: 0, height: 384 });
   });
 
   it('treats the front window as the active one', () => {

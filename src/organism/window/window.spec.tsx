@@ -66,12 +66,36 @@ describe('Window', () => {
     expect(onMove).not.toHaveBeenCalled();
   });
 
-  it('resizes by the distance its corner is dragged', () => {
+  it('widens from the right edge without moving', () => {
     const { onResize } = renderWindow();
 
-    drag(screen.getByTestId('resize-handle'), 20, 10);
+    drag(screen.getByTestId('resize-right'), 20, 10);
 
-    expect(onResize).toHaveBeenCalledWith(420, 310);
+    expect(onResize).toHaveBeenCalledWith({ x: 100, y: 50, width: 420, height: 300 });
+  });
+
+  it('moves with the left edge so the right edge stays put', () => {
+    const { onResize } = renderWindow();
+
+    drag(screen.getByTestId('resize-left'), -20, 10);
+
+    expect(onResize).toHaveBeenCalledWith({ x: 80, y: 50, width: 420, height: 300 });
+  });
+
+  it('resizes both ways from a corner', () => {
+    const { onResize } = renderWindow();
+
+    drag(screen.getByTestId('resize-top-left'), 30, 40);
+
+    expect(onResize).toHaveBeenCalledWith({ x: 130, y: 90, width: 370, height: 260 });
+  });
+
+  it('stops at its minimum size without the opposite edge moving', () => {
+    const { onResize } = renderWindow();
+
+    drag(screen.getByTestId('resize-top-left'), 1000, 1000);
+
+    expect(onResize).toHaveBeenCalledWith({ x: 300, y: 230, width: 200, height: 120 });
   });
 
   it('can not be moved or resized while maximized', () => {
@@ -80,7 +104,7 @@ describe('Window', () => {
     drag(screen.getByText('About Me'), 30, 40);
 
     expect(onMove).not.toHaveBeenCalled();
-    expect(screen.queryByTestId('resize-handle')).not.toBeInTheDocument();
+    expect(screen.queryByTestId(/^resize-/)).not.toBeInTheDocument();
   });
 
   it('runs the matching action for each title bar button', async () => {

@@ -28,7 +28,7 @@ export function DesktopWindows() {
           onToggleMaximize={() => toggleMaximize(w.id)}
           onClose={() => close(w.id)}
           onMove={(x, y) => move(w.id, x, y)}
-          onResize={(width, height) => resize(w.id, width, height)}
+          onResize={(bounds) => resize(w.id, bounds)}
         >
           <p>Placeholder content</p>
         </Window>
