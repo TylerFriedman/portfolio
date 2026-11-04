@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { ProgramId } from '../../../programs/registry';
+import { clamp } from '../../../utils/clamp';
 import type { DesktopWindow, WindowStore } from './types';
 
 const CASCADE_STEP = 24;
@@ -9,10 +10,6 @@ const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
 const VISIBLE_EDGE = 48;
 const TASKBAR_HEIGHT = 30;
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
 
 function patch(
   windows: DesktopWindow[],
