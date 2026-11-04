@@ -1,11 +1,11 @@
 import clsx from 'clsx';
+import type { PointerEvent } from 'react';
 
 interface DesktopIconProps {
   label: string;
   icon: string;
   isSelected: boolean;
-  onSelect: () => void;
-  onToggle: () => void;
+  onPointerDown: (event: PointerEvent<HTMLButtonElement>) => void;
   onSelectAll: () => void;
   onOpen: () => void;
 }
@@ -14,8 +14,7 @@ export function DesktopIcon({
   label,
   icon,
   isSelected,
-  onSelect,
-  onToggle,
+  onPointerDown,
   onSelectAll,
   onOpen,
 }: Readonly<DesktopIconProps>) {
@@ -23,7 +22,7 @@ export function DesktopIcon({
     <button
       type="button"
       className="button-reset group flex w-19 flex-col items-center gap-1"
-      onClick={(event) => (event.ctrlKey || event.metaKey ? onToggle() : onSelect())}
+      onPointerDown={onPointerDown}
       onDoubleClick={onOpen}
       onKeyDown={(event) => {
         if (event.key === 'Enter') onOpen();

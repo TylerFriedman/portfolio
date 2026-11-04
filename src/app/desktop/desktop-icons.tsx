@@ -1,56 +1,74 @@
-import { useState, type PointerEvent } from 'react';
-import { overlaps, useMarquee } from '../../hooks/use-marquee';
+import type { PointerEvent } from 'react';
+import { useDragOffset } from '../../hooks/use-drag-offset';
+import { useMarquee } from '../../hooks/use-marquee';
 import { DesktopIcon } from '../../organism/desktop-icon/desktop-icon';
 import { PROGRAM_IDS, PROGRAMS, type ProgramId } from '../../programs/registry';
+import { iconBox, useIconActions, useIconStore } from './store/icon-store';
 import { useWindowActions } from './store/window-store';
 
 export function DesktopIcons() {
+  const cells = useIconStore((s) => s.cells);
+  const selectedIds = useIconStore((s) => s.selectedIds);
+  const { select, toggle, selectAll, selectInBox, clearSelection, moveSelection } =
+    useIconActions();
   const { open } = useWindowActions();
-  const [selectedIds, setSelectedIds] = useState<ProgramId[]>([]);
   const { marquee, startMarquee } = useMarquee();
+  const { offset, startDrag } = useDragOffset();
 
-  function toggle(id: ProgramId) {
-    setSelectedIds((ids) =>
-      ids.includes(id) ? ids.filter((other) => other !== id) : [...ids, id],
-    );
+  function handleDesktopPointerDown(event: PointerEvent<HTMLUListElement>) {
+    if (event.target !== event.currentTarget) return;
+    clearSelection();
+    startMarquee(event, selectInBox);
   }
 
-  function handlePointerDown(event: PointerEvent<HTMLUListElement>) {
-    if (event.target !== event.currentTarget) return;
-    setSelectedIds([]);
-    // the list items render in PROGRAM_IDS order
-    const items = Array.from(event.currentTarget.children);
-    startMarquee(event, (box) =>
-      setSelectedIds(PROGRAM_IDS.filter((_, i) => overlaps(box, items[i].getBoundingClientRect()))),
-    );
+  function handleIconPointerDown(id: ProgramId, event: PointerEvent<HTMLButtonElement>) {
+    if (event.ctrlKey || event.metaKey) {
+      toggle(id);
+      return;
+    }
+    // pressing an icon in the selection drags the whole selection, as in xp
+    if (!selectedIds.includes(id)) select(id);
+    startDrag(event, (dx, dy) => {
+      // a press that never moved is a click, which narrows the selection to this icon
+      if (dx === 0 && dy === 0) select(id);
+      else moveSelection(dx, dy);
+    });
   }
 
   return (
     <>
       <ul
-        // relative so the icons paint above the wallpaper image
-        className="relative flex h-full touch-none flex-col flex-wrap content-start gap-4 p-2 select-none"
-        onPointerDown={handlePointerDown}
+        // positioned so the icons paint above the wallpaper image
+        className="absolute inset-0 touch-none select-none"
+        onPointerDown={handleDesktopPointerDown}
       >
-        {PROGRAM_IDS.map((id) => (
-          <li key={id}>
-            <DesktopIcon
-              label={PROGRAMS[id].title}
-              icon={PROGRAMS[id].icon}
-              isSelected={selectedIds.includes(id)}
-              onSelect={() => setSelectedIds([id])}
-              onToggle={() => toggle(id)}
-              onSelectAll={() => setSelectedIds(PROGRAM_IDS)}
-              // opening a selected icon opens the whole selection, as in xp
-              onOpen={() => (selectedIds.includes(id) ? selectedIds : [id]).forEach(open)}
-            />
-          </li>
-        ))}
+        {PROGRAM_IDS.map((id) => {
+          const isSelected = selectedIds.includes(id);
+          const { left, top } = iconBox(cells[id]);
+          const shift = isSelected && offset ? offset : { dx: 0, dy: 0 };
+          return (
+            <li
+              key={id}
+              className="absolute"
+              style={{ left: left + shift.dx, top: top + shift.dy }}
+            >
+              <DesktopIcon
+                label={PROGRAMS[id].title}
+                icon={PROGRAMS[id].icon}
+                isSelected={isSelected}
+                onPointerDown={(event) => handleIconPointerDown(id, event)}
+                onSelectAll={selectAll}
+                // opening a selected icon opens the whole selection, as in xp
+                onOpen={() => (isSelected ? selectedIds : [id]).forEach(open)}
+              />
+            </li>
+          );
+        })}
       </ul>
       {marquee && (
         <div
           data-testid="marquee"
-          className="border-highlight bg-highlight/30 pointer-events-none fixed border"
+          className="border-highlight bg-highlight/30 pointer-events-none absolute border"
           style={{
             left: marquee.left,
             top: marquee.top,

@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { DesktopIcon } from './desktop-icon';
 
 function renderIcon() {
-  const handlers = { onSelect: vi.fn(), onToggle: vi.fn(), onSelectAll: vi.fn(), onOpen: vi.fn() };
+  const handlers = { onPointerDown: vi.fn(), onSelectAll: vi.fn(), onOpen: vi.fn() };
   render(<DesktopIcon label="Projects" icon="/folder.png" isSelected={false} {...handlers} />);
   return handlers;
 }
@@ -19,25 +19,14 @@ describe('DesktopIcon', () => {
     expect(onOpen).toHaveBeenCalledOnce();
   });
 
-  it('only selects on a single click', async () => {
+  it('does not open on a single click', async () => {
     const user = userEvent.setup();
-    const { onSelect, onOpen } = renderIcon();
+    const { onPointerDown, onOpen } = renderIcon();
 
     await user.click(screen.getByRole('button', { name: 'Projects' }));
 
-    expect(onSelect).toHaveBeenCalledOnce();
+    expect(onPointerDown).toHaveBeenCalledOnce();
     expect(onOpen).not.toHaveBeenCalled();
-  });
-
-  it('toggles instead of selecting when ctrl is held', async () => {
-    const user = userEvent.setup();
-    const { onSelect, onToggle } = renderIcon();
-
-    await user.keyboard('{Control>}');
-    await user.click(screen.getByRole('button', { name: 'Projects' }));
-
-    expect(onToggle).toHaveBeenCalledOnce();
-    expect(onSelect).not.toHaveBeenCalled();
   });
 
   it('opens with the enter key for keyboard users', async () => {

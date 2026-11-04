@@ -3,7 +3,7 @@ import type { PointerEvent } from 'react';
 export function trackDrag(
   event: PointerEvent<HTMLElement>,
   onDrag: (dx: number, dy: number) => void,
-  onEnd?: () => void,
+  onEnd?: (dx: number, dy: number) => void,
 ) {
   if (event.button !== 0) return;
 
@@ -19,10 +19,13 @@ export function trackDrag(
     (move) => onDrag(move.clientX - clientX, move.clientY - clientY),
     { signal: drag.signal },
   );
-  function end() {
+  function end(dx: number, dy: number) {
     drag.abort();
-    onEnd?.();
+    onEnd?.(dx, dy);
   }
-  target.addEventListener('pointerup', end, { signal: drag.signal });
-  target.addEventListener('pointercancel', end, { signal: drag.signal });
+  target.addEventListener('pointerup', (up) => end(up.clientX - clientX, up.clientY - clientY), {
+    signal: drag.signal,
+  });
+  // a cancelled gesture ends where it started
+  target.addEventListener('pointercancel', () => end(0, 0), { signal: drag.signal });
 }

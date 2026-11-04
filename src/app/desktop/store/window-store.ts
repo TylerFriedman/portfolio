@@ -1,7 +1,31 @@
 import { create } from 'zustand';
 import type { ProgramId } from '../../../programs/registry';
 import { clamp } from '../../../utils/clamp';
-import type { DesktopWindow, WindowStore } from './types';
+import { desktopSize } from '../layout';
+
+interface DesktopWindow {
+  id: ProgramId;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  isMinimized: boolean;
+  isMaximized: boolean;
+}
+
+interface WindowStore {
+  windows: DesktopWindow[];
+  focusOrder: ProgramId[];
+  actions: {
+    open: (id: ProgramId) => void;
+    close: (id: ProgramId) => void;
+    focus: (id: ProgramId) => void;
+    minimize: (id: ProgramId) => void;
+    toggleMaximize: (id: ProgramId) => void;
+    move: (id: ProgramId, x: number, y: number) => void;
+    resize: (id: ProgramId, width: number, height: number) => void;
+  };
+}
 
 const CASCADE_STEP = 24;
 const DEFAULT_WIDTH = 480;
@@ -9,7 +33,6 @@ const DEFAULT_HEIGHT = 360;
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 120;
 const VISIBLE_EDGE = 48;
-const TASKBAR_HEIGHT = 30;
 
 function patch(
   windows: DesktopWindow[],
@@ -67,12 +90,15 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
       set((s) => ({ windows: patch(s.windows, id, (w) => ({ isMaximized: !w.isMaximized })) })),
     // keeps enough of the title bar on screen to drag the window back
     move: (id, x, y) =>
-      set((s) => ({
-        windows: patch(s.windows, id, (w) => ({
-          x: clamp(x, VISIBLE_EDGE - w.width, window.innerWidth - VISIBLE_EDGE),
-          y: clamp(y, 0, window.innerHeight - TASKBAR_HEIGHT - VISIBLE_EDGE),
-        })),
-      })),
+      set((s) => {
+        const { width, height } = desktopSize();
+        return {
+          windows: patch(s.windows, id, (w) => ({
+            x: clamp(x, VISIBLE_EDGE - w.width, width - VISIBLE_EDGE),
+            y: clamp(y, 0, height - VISIBLE_EDGE),
+          })),
+        };
+      }),
     resize: (id, width, height) =>
       set((s) => ({
         windows: patch(s.windows, id, () => ({
