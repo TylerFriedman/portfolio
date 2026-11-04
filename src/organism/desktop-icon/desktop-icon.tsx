@@ -1,36 +1,38 @@
 import clsx from 'clsx';
-import type { PointerEvent } from 'react';
+import type { KeyboardEvent, PointerEvent, Ref } from 'react';
 
 interface DesktopIconProps {
+  ref?: Ref<HTMLButtonElement>;
   label: string;
   icon: string;
   isSelected: boolean;
+  isFocused: boolean;
   onPointerDown: (event: PointerEvent<HTMLButtonElement>) => void;
-  onSelectAll: () => void;
+  onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
   onOpen: () => void;
 }
 
 export function DesktopIcon({
+  ref,
   label,
   icon,
   isSelected,
+  isFocused,
   onPointerDown,
-  onSelectAll,
+  onKeyDown,
   onOpen,
 }: Readonly<DesktopIconProps>) {
   return (
     <button
+      ref={ref}
       type="button"
+      aria-pressed={isSelected}
+      // only the focused icon is a tab stop, the arrow keys reach the rest
+      tabIndex={isFocused ? 0 : -1}
       className="button-reset group flex w-19 flex-col items-center gap-1"
       onPointerDown={onPointerDown}
+      onKeyDown={onKeyDown}
       onDoubleClick={onOpen}
-      onKeyDown={(event) => {
-        if (event.key === 'Enter') onOpen();
-        if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
-          event.preventDefault();
-          onSelectAll();
-        }
-      }}
     >
       <span className="relative">
         <img src={icon} alt="" draggable={false} className="size-12" />

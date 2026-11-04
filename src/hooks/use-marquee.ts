@@ -7,7 +7,11 @@ import { trackDrag } from '../utils/track-drag';
 export function useMarquee() {
   const [marquee, setMarquee] = useState<Box | null>(null);
 
-  function startMarquee(event: PointerEvent<HTMLElement>, onResize: (box: Box) => void) {
+  function startMarquee(
+    event: PointerEvent<HTMLElement>,
+    onResize: (box: Box) => void,
+    onEnd: () => void,
+  ) {
     const bounds = event.currentTarget.getBoundingClientRect();
     const x = event.clientX - bounds.left;
     const y = event.clientY - bounds.top;
@@ -26,7 +30,10 @@ export function useMarquee() {
         setMarquee(box);
         onResize(box);
       },
-      () => setMarquee(null),
+      () => {
+        setMarquee(null);
+        onEnd();
+      },
     );
   }
 

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { PointerEvent, ReactNode } from 'react';
+import { useEffect, useRef, type PointerEvent, type ReactNode } from 'react';
 import { trackDrag } from '../../utils/track-drag';
 
 interface Bounds {
@@ -59,6 +59,13 @@ export function Window({
   onMove,
   onResize,
 }: Readonly<WindowProps>) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  // the front window takes keyboard focus, as in xp, so keys stop reaching whatever is behind it
+  useEffect(() => {
+    if (isActive) dialogRef.current?.focus();
+  }, [isActive]);
+
   function handleTitleBarPointerDown(event: PointerEvent<HTMLElement>) {
     // capturing the pointer from a button would swallow its click
     if (isMaximized || (event.target instanceof Element && event.target.closest('button'))) return;
@@ -81,11 +88,17 @@ export function Window({
 
   return (
     <dialog
+      ref={dialogRef}
       aria-label={title}
       // closed rather than unmounted so a program keeps its state while minimized
       open={!isMinimized}
+      // focusable from script only, it stays out of the tab order
+      tabIndex={-1}
       // flex only while open as it would override the browser hiding a closed dialog
-      className={clsx('window absolute flex-col open:flex', isMaximized && 'inset-0 size-full')}
+      className={clsx(
+        'window absolute flex-col outline-none open:flex',
+        isMaximized && 'inset-0 size-full',
+      )}
       style={isMaximized ? { zIndex } : { zIndex, left: x, top: y, width, height }}
       onPointerDown={onFocus}
     >

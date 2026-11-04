@@ -145,6 +145,18 @@ describe('Window', () => {
     expect(screen.getByText('Hello')).not.toBeVisible();
   });
 
+  it('takes keyboard focus when it becomes the front window', () => {
+    renderWindow();
+
+    expect(screen.getByRole('dialog', { name: 'About Me' })).toHaveFocus();
+  });
+
+  it('leaves keyboard focus alone while it is behind another window', () => {
+    renderWindow({ isActive: false });
+
+    expect(screen.getByRole('dialog', { name: 'About Me' })).not.toHaveFocus();
+  });
+
   it('comes to the front when clicked anywhere inside', () => {
     const { onFocus } = renderWindow();
 

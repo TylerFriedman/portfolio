@@ -12,8 +12,11 @@ interface Cell {
 interface IconStore {
   cells: Record<ProgramId, Cell>;
   selectedIds: ProgramId[];
+  focusedId: ProgramId;
   actions: {
+    focus: (id: ProgramId) => void;
     select: (id: ProgramId) => void;
+    add: (id: ProgramId) => void;
     toggle: (id: ProgramId) => void;
     selectAll: () => void;
     selectInBox: (box: Box) => void;
@@ -52,6 +55,27 @@ function cellKey({ col, row }: Cell) {
   return `${col},${row}`;
 }
 
+// the nearest icon ahead, preferring one in the same column or row so arrows move along a line
+export function iconInDirection(
+  cells: Record<ProgramId, Cell>,
+  from: ProgramId,
+  dCol: number,
+  dRow: number,
+) {
+  const { col, row } = cells[from];
+  return PROGRAM_IDS.map((id) => {
+    const offCol = cells[id].col - col;
+    const offRow = cells[id].row - row;
+    return {
+      id,
+      ahead: offCol * dCol + offRow * dRow,
+      aside: Math.abs(offCol * dRow - offRow * dCol),
+    };
+  })
+    .filter(({ ahead }) => ahead > 0)
+    .sort((a, b) => a.aside - b.aside || a.ahead - b.ahead)[0]?.id;
+}
+
 // filled top to bottom then left to right, like a fresh xp desktop
 function initialCells() {
   const { rows } = gridSize();
@@ -63,19 +87,28 @@ function initialCells() {
 export const useIconStore = create<IconStore>()((set) => ({
   cells: initialCells(),
   selectedIds: [],
+  focusedId: PROGRAM_IDS[0],
   actions: {
-    select: (id) => set({ selectedIds: [id] }),
+    focus: (id) => set({ focusedId: id }),
+    select: (id) => set({ selectedIds: [id], focusedId: id }),
+    add: (id) =>
+      set((s) => ({
+        selectedIds: s.selectedIds.includes(id) ? s.selectedIds : [...s.selectedIds, id],
+        focusedId: id,
+      })),
     toggle: (id) =>
       set((s) => ({
         selectedIds: s.selectedIds.includes(id)
           ? s.selectedIds.filter((other) => other !== id)
           : [...s.selectedIds, id],
+        focusedId: id,
       })),
     selectAll: () => set({ selectedIds: PROGRAM_IDS }),
     selectInBox: (box) =>
-      set((s) => ({
-        selectedIds: PROGRAM_IDS.filter((id) => overlaps(box, iconBox(s.cells[id]))),
-      })),
+      set((s) => {
+        const selectedIds = PROGRAM_IDS.filter((id) => overlaps(box, iconBox(s.cells[id])));
+        return { selectedIds, focusedId: selectedIds[0] ?? s.focusedId };
+      }),
     clearSelection: () => set({ selectedIds: [] }),
     moveSelection: (dx, dy) =>
       set((s) => {

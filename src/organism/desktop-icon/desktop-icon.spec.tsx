@@ -3,9 +3,17 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { DesktopIcon } from './desktop-icon';
 
-function renderIcon() {
-  const handlers = { onPointerDown: vi.fn(), onSelectAll: vi.fn(), onOpen: vi.fn() };
-  render(<DesktopIcon label="Projects" icon="/folder.png" isSelected={false} {...handlers} />);
+function renderIcon({ isSelected = false, isFocused = false } = {}) {
+  const handlers = { onPointerDown: vi.fn(), onKeyDown: vi.fn(), onOpen: vi.fn() };
+  render(
+    <DesktopIcon
+      label="Projects"
+      icon="/folder.png"
+      isSelected={isSelected}
+      isFocused={isFocused}
+      {...handlers}
+    />,
+  );
   return handlers;
 }
 
@@ -29,23 +37,15 @@ describe('DesktopIcon', () => {
     expect(onOpen).not.toHaveBeenCalled();
   });
 
-  it('opens with the enter key for keyboard users', async () => {
-    const user = userEvent.setup();
-    const { onOpen } = renderIcon();
+  it('tells assistive tech whether it is selected', () => {
+    renderIcon({ isSelected: true });
 
-    await user.tab();
-    await user.keyboard('{Enter}');
-
-    expect(onOpen).toHaveBeenCalledOnce();
+    expect(screen.getByRole('button', { name: 'Projects', pressed: true })).toBeInTheDocument();
   });
 
-  it('selects every icon with ctrl+a', async () => {
-    const user = userEvent.setup();
-    const { onSelectAll } = renderIcon();
+  it('is a tab stop only while it holds focus', () => {
+    renderIcon({ isFocused: true });
 
-    await user.tab();
-    await user.keyboard('{Control>}a{/Control}');
-
-    expect(onSelectAll).toHaveBeenCalledOnce();
+    expect(screen.getByRole('button', { name: 'Projects' })).toHaveAttribute('tabindex', '0');
   });
 });

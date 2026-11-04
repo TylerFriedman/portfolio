@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { ProgramId } from '../../../programs/registry';
-import { useIconStore } from './icon-store';
+import { iconInDirection, useIconStore } from './icon-store';
 
 const actions = () => useIconStore.getState().actions;
 const cellOf = (id: ProgramId) => useIconStore.getState().cells[id];
@@ -29,6 +29,25 @@ describe('icon store', () => {
     actions().selectInBox({ left: 50, top: 10, right: 200, bottom: 150 });
 
     expect(selectedIds()).toEqual(['about', 'resume']);
+  });
+
+  it('hands focus to the first icon a box selects', () => {
+    actions().selectInBox({ left: 0, top: 90, right: 100, bottom: 250 });
+
+    expect(useIconStore.getState().focusedId).toBe('resume');
+  });
+
+  it('finds the next icon along a line before one off to the side', () => {
+    const cells = {
+      about: { col: 0, row: 0 },
+      resume: { col: 3, row: 1 },
+      projects: { col: 0, row: 4 },
+      contact: { col: 5, row: 5 },
+    };
+
+    expect(iconInDirection(cells, 'about', 0, 1)).toBe('projects');
+    expect(iconInDirection(cells, 'about', 1, 0)).toBe('resume');
+    expect(iconInDirection(cells, 'about', 0, -1)).toBeUndefined();
   });
 
   it('snaps a dropped icon to the nearest grid cell', () => {
