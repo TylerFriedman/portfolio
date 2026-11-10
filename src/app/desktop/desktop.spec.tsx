@@ -22,4 +22,25 @@ describe('Desktop', () => {
     expect(screen.getByRole('dialog', { name: 'Resume' })).toHaveFocus();
     expect(icons.getByRole('button', { name: 'Resume', pressed: true })).toBeInTheDocument();
   });
+
+  it.each(['Close', 'Minimize'])(
+    'hands the keyboard back to the desktop on %s of the last window',
+    async (button) => {
+      const user = userEvent.setup();
+      render(<Desktop />);
+      const icons = within(screen.getByRole('list', { name: 'Desktop' }));
+
+      await user.tab();
+      await user.keyboard('{ArrowDown}{Enter}');
+      await user.click(screen.getByRole('button', { name: button }));
+
+      expect(icons.getByRole('button', { name: 'Resume' })).toHaveFocus();
+    },
+  );
+
+  it('leaves focus alone when the page loads', () => {
+    render(<Desktop />);
+
+    expect(document.body).toHaveFocus();
+  });
 });

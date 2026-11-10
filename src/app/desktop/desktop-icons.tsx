@@ -4,7 +4,7 @@ import { useMarquee } from '../../hooks/use-marquee';
 import { DesktopIcon } from '../../organism/desktop-icon/desktop-icon';
 import { PROGRAM_IDS, PROGRAMS, type ProgramId } from '../../programs/registry';
 import { iconBox, iconInDirection, useIconActions, useIconStore } from './store/icon-store';
-import { useWindowActions } from './store/window-store';
+import { useActiveWindowId, useWindowActions } from './store/window-store';
 
 // cmd on a mac does what ctrl does on windows
 function isCtrlHeld(event: Pick<KeyboardEvent, 'ctrlKey' | 'metaKey'>) {
@@ -18,15 +18,23 @@ export function DesktopIcons() {
   const { focus, select, add, toggle, selectAll, selectInBox, clearSelection, moveSelection } =
     useIconActions();
   const { open } = useWindowActions();
+  const activeWindowId = useActiveWindowId();
   const { marquee, startMarquee } = useMarquee();
   const { offset, startDrag } = useDragOffset();
   const listRef = useRef<HTMLUListElement>(null);
   const focusedRef = useRef<HTMLButtonElement>(null);
+  const hadActiveWindow = useRef(false);
 
   // focus follows the focused icon while the desktop has it, so it is never taken from a window
   useEffect(() => {
     if (listRef.current?.contains(document.activeElement)) focusedRef.current?.focus();
   }, [focusedId]);
+
+  // the desktop takes focus back once the last window closes or minimizes, as in xp
+  useEffect(() => {
+    if (hadActiveWindow.current && !activeWindowId) focusedRef.current?.focus();
+    hadActiveWindow.current = activeWindowId !== null;
+  }, [activeWindowId]);
 
   function handleDesktopPointerDown(event: PointerEvent<HTMLUListElement>) {
     if (event.target !== event.currentTarget) return;
