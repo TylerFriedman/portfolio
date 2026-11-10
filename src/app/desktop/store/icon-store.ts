@@ -63,17 +63,11 @@ export function iconInDirection(
   dRow: number,
 ) {
   const { col, row } = cells[from];
-  return PROGRAM_IDS.map((id) => {
-    const offCol = cells[id].col - col;
-    const offRow = cells[id].row - row;
-    return {
-      id,
-      ahead: offCol * dCol + offRow * dRow,
-      aside: Math.abs(offCol * dRow - offRow * dCol),
-    };
-  })
-    .filter(({ ahead }) => ahead > 0)
-    .sort((a, b) => a.aside - b.aside || a.ahead - b.ahead)[0]?.id;
+  const ahead = (id: ProgramId) => (cells[id].col - col) * dCol + (cells[id].row - row) * dRow;
+  const aside = (id: ProgramId) =>
+    Math.abs((cells[id].col - col) * dRow - (cells[id].row - row) * dCol);
+  const byNearest = (a: ProgramId, b: ProgramId) => aside(a) - aside(b) || ahead(a) - ahead(b);
+  return PROGRAM_IDS.filter((id) => ahead(id) > 0).sort(byNearest)[0];
 }
 
 // filled top to bottom then left to right, like a fresh xp desktop

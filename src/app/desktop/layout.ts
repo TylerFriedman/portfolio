@@ -1,4 +1,4 @@
-export const TASKBAR_HEIGHT = 30;
+const TASKBAR_HEIGHT = 30;
 
 // the desktop fills the viewport above the taskbar
 export function desktopSize() {
