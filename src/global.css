@@ -6,7 +6,7 @@
   --font-start: 'Segoe UI', 'Trebuchet MS', sans-serif;
   --font-xp: 'Pixelated MS Sans Serif', Arial, sans-serif;
 
-  --text-menu: 11px;
+  --text-xp: 11px;
 
   --color-desktop: #004e98;
   --color-highlight: #316ac5;
@@ -21,12 +21,18 @@
   --color-start-menu-side-text: #00136b;
   --color-start-menu-side-divider: rgb(135 179 226 / 0.7);
   --color-start-menu-picture-border: rgb(222 222 222 / 0.8);
+  --color-address-border: #7f9db9;
+  --color-explorer-rule: #70bfff;
+  --color-task-pane-group: #d6dff7;
+  --color-task-pane-text: #215dc6;
+  --color-task-pane-hover: #428eff;
 
   --shadow-taskbar-button: inset -1px 0 rgb(0 0 0 / 0.3), inset 1px 1px 1px rgb(255 255 255 / 0.2);
   --shadow-taskbar-button-active:
     inset 0 0 1px 1px rgb(0 0 0 / 0.2), inset 1px 0 1px rgb(0 0 0 / 0.7);
   --shadow-tray: inset 1px 0 1px #18bbff;
   --shadow-start-menu: 2px 4px 2px rgb(0 0 0 / 0.5);
+  --shadow-toolbar-button: inset 0 -1px 1px rgb(0 0 0 / 0.1);
 
   --text-shadow-start: 1px 1px 2px rgb(0 0 0 / 0.6);
 }
@@ -127,4 +133,16 @@
     #1468d5 75%,
     #0f61cb 88%
   );
+}
+
+@utility bg-explorer {
+  background-image: linear-gradient(to right, #edede5, #ede8cd);
+}
+
+@utility bg-task-pane {
+  background-image: linear-gradient(#7ba2e7, #6375d6);
+}
+
+@utility bg-task-pane-header {
+  background-image: linear-gradient(to right, #fff 50%, #c6d3f7);
 }

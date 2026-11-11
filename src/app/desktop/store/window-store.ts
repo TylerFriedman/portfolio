@@ -28,8 +28,8 @@ interface WindowStore {
 }
 
 const CASCADE_STEP = 24;
-const DEFAULT_WIDTH = 480;
-const DEFAULT_HEIGHT = 360;
+const DEFAULT_WIDTH = 640;
+const DEFAULT_HEIGHT = 480;
 const VISIBLE_EDGE = 48;
 
 function patch(

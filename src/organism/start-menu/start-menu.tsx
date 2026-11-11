@@ -81,7 +81,7 @@ export function StartMenu({
               </li>
             ))}
           </ul>
-          <div className="bg-start-menu-side border-start-menu-border/40 font-xp text-menu flex flex-1 flex-col border-l px-1.25 pt-1.5 pb-1.25">
+          <div className="bg-start-menu-side border-start-menu-border/40 font-xp text-xp flex flex-1 flex-col border-l px-1.25 pt-1.5 pb-1.25">
             <ul className="flex flex-col gap-1">
               {places.map(({ title, icon, onOpen }) => (
                 <li key={title}>

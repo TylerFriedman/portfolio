@@ -10,29 +10,32 @@ export function DesktopWindows() {
 
   return (
     <>
-      {windows.map((w) => (
-        <Window
-          key={w.id}
-          title={PROGRAMS[w.id].title}
-          icon={PROGRAMS[w.id].icon}
-          x={w.x}
-          y={w.y}
-          width={w.width}
-          height={w.height}
-          zIndex={focusOrder.indexOf(w.id)}
-          isActive={w.id === activeId}
-          isMinimized={w.isMinimized}
-          isMaximized={w.isMaximized}
-          onFocus={() => focus(w.id)}
-          onMinimize={() => minimize(w.id)}
-          onToggleMaximize={() => toggleMaximize(w.id)}
-          onClose={() => close(w.id)}
-          onMove={(x, y) => move(w.id, x, y)}
-          onResize={(bounds) => resize(w.id, bounds)}
-        >
-          <p>Placeholder content</p>
-        </Window>
-      ))}
+      {windows.map((w) => {
+        const { title, icon, component: Program } = PROGRAMS[w.id];
+        return (
+          <Window
+            key={w.id}
+            title={title}
+            icon={icon}
+            x={w.x}
+            y={w.y}
+            width={w.width}
+            height={w.height}
+            zIndex={focusOrder.indexOf(w.id)}
+            isActive={w.id === activeId}
+            isMinimized={w.isMinimized}
+            isMaximized={w.isMaximized}
+            onFocus={() => focus(w.id)}
+            onMinimize={() => minimize(w.id)}
+            onToggleMaximize={() => toggleMaximize(w.id)}
+            onClose={() => close(w.id)}
+            onMove={(x, y) => move(w.id, x, y)}
+            onResize={(bounds) => resize(w.id, bounds)}
+          >
+            <Program />
+          </Window>
+        );
+      })}
     </>
   );
 }

@@ -130,7 +130,8 @@ export function Window({
           <button type="button" aria-label="Close" onClick={onClose} />
         </div>
       </div>
-      <div className="window-body flex-1 overflow-auto">{children}</div>
+      {/* inset by the 3px frame, leaving each program to lay out its own content */}
+      <div className="mx-0.75 flex min-h-0 flex-1 flex-col overflow-auto">{children}</div>
       {!isMaximized &&
         RESIZE_HANDLES.map((handle) => (
           <div
