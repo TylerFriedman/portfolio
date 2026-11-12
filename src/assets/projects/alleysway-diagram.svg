@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 390" width="640" height="390" shape-rendering="crispEdges" font-family="Tahoma, Verdana, sans-serif" font-size="11">
+  <!-- colours come from xp paint's default palette -->
+  <defs>
+    <!-- wobbles the shapes so they look drawn by mouse -->
+    <filter id="hand" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="head" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M0 0L8 4L0 8z" fill="#000000"/>
+    </marker>
+  </defs>
+  <rect width="640" height="390" fill="#ffffff"/>
+
+  <g filter="url(#hand)" stroke="#000000" stroke-width="2">
+    <!-- people -->
+    <g fill="none">
+      <circle cx="40" cy="14" r="7"/>
+      <path d="M40 21v16M30 27h20M40 37l-8 12M40 37l8 12"/>
+      <circle cx="470" cy="14" r="7"/>
+      <path d="M470 21v16M460 27h20M470 37l-8 12M470 37l8 12"/>
+    </g>
+
+    <!-- zones -->
+    <rect x="10" y="70" width="200" height="270" fill="#ffffff"/>
+    <rect x="10" y="70" width="200" height="20" fill="#008080"/>
+    <rect x="230" y="70" width="180" height="270" fill="#ffffff"/>
+    <rect x="230" y="70" width="180" height="20" fill="#000080"/>
+    <rect x="430" y="70" width="200" height="270" fill="#ffffff"/>
+    <rect x="430" y="70" width="200" height="20" fill="#008000"/>
+
+    <!-- website and app boxes -->
+    <g fill="#80ffff">
+      <rect x="20" y="100" width="180" height="28"/>
+      <rect x="20" y="138" width="180" height="28"/>
+      <rect x="20" y="176" width="180" height="28"/>
+      <rect x="20" y="214" width="180" height="28"/>
+      <rect x="20" y="252" width="180" height="28"/>
+      <rect x="20" y="290" width="180" height="28"/>
+    </g>
+    <g fill="#ffff80">
+      <rect x="440" y="100" width="180" height="28"/>
+      <rect x="440" y="138" width="180" height="28"/>
+      <rect x="440" y="176" width="180" height="28"/>
+      <rect x="440" y="214" width="180" height="28"/>
+      <rect x="440" y="252" width="180" height="28"/>
+      <rect x="440" y="290" width="180" height="28"/>
+    </g>
+
+    <!-- firebase and google calendar -->
+    <g fill="#ff8040">
+      <path d="M255 118v92a65 12 0 0 0 130 0v-92"/>
+      <ellipse cx="320" cy="118" rx="65" ry="12"/>
+    </g>
+    <rect x="250" y="246" width="140" height="56" fill="#ffffff"/>
+    <rect x="250" y="246" width="140" height="14" fill="#ff0000"/>
+    <path d="M276 241v10M364 241v10"/>
+
+    <!-- connections -->
+    <g marker-start="url(#head)" marker-end="url(#head)">
+      <path d="M212 166H253"/>
+      <path d="M428 166H387"/>
+    </g>
+    <!-- bookings are only written to the calendar, never read back -->
+    <g marker-end="url(#head)">
+      <path d="M212 266H248"/>
+      <path d="M428 266H392"/>
+    </g>
+  </g>
+
+  <text x="58" y="32">Trainers</text>
+  <text x="488" y="32">Members (website + app)</text>
+  <g fill="#ffffff" font-weight="bold" text-anchor="middle">
+    <text x="110" y="84">WEBSITE · ASP.NET Core MVC</text>
+    <text x="320" y="84">CLOUD</text>
+    <text x="530" y="84">ANDROID APP · Kotlin</text>
+  </g>
+  <g text-anchor="middle">
+    <text x="110" y="118">Google sign-in</text>
+    <text x="110" y="156">Trainer availability</text>
+    <text x="110" y="194">Payment overview + income</text>
+    <text x="110" y="232">Client PDF export (jsPDF)</text>
+    <text x="110" y="270">Booking + cancelling</text>
+    <text x="110" y="308">Chat with trainers</text>
+    <text x="320" y="152" font-weight="bold">Firebase</text>
+    <text x="320" y="168">Auth</text>
+    <text x="320" y="182">Realtime Database</text>
+    <text x="320" y="196">Storage (photos)</text>
+    <text x="320" y="279" font-weight="bold">Google Calendar</text>
+    <text x="320" y="293">session events</text>
+    <text x="530" y="118">QR code check-in</text>
+    <text x="530" y="156">Workout logging + history</text>
+    <text x="530" y="194">Weight tracking + forecast</text>
+    <text x="530" y="232">"How busy is the gym" chart</text>
+    <text x="530" y="270">Session booking</text>
+    <text x="530" y="308">Opt-out leaderboard</text>
+    <text x="320" y="368" fill="#808080">The website and the app share one Firebase project.</text>
+  </g>
+</svg>

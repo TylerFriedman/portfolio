@@ -11,12 +11,13 @@ export function DesktopWindows() {
   return (
     <>
       {windows.map((w) => {
-        const { title, icon, component: Program } = PROGRAMS[w.id];
+        const { title, icon, component: Program, minSize } = PROGRAMS[w.id];
         return (
           <Window
             key={w.id}
             title={title}
             icon={icon}
+            minSize={minSize}
             x={w.x}
             y={w.y}
             width={w.width}

@@ -2,15 +2,15 @@ import clsx from 'clsx';
 import { useEffect, useRef, type PointerEvent, type ReactNode } from 'react';
 import { trackDrag } from '../../utils/track-drag';
 
-interface Bounds {
-  x: number;
-  y: number;
+interface Size {
   width: number;
   height: number;
 }
 
-const MIN_WIDTH = 200;
-const MIN_HEIGHT = 120;
+interface Bounds extends Size {
+  x: number;
+  y: number;
+}
 
 // x and y say which way each handle grows the window, corners come last so they sit above the edges
 const RESIZE_HANDLES = [
@@ -27,6 +27,7 @@ const RESIZE_HANDLES = [
 export interface WindowProps extends Bounds {
   title: string;
   icon: string;
+  minSize: Size;
   zIndex: number;
   isActive: boolean;
   isMinimized: boolean;
@@ -43,6 +44,7 @@ export interface WindowProps extends Bounds {
 export function Window({
   title,
   icon,
+  minSize,
   x,
   y,
   width,
@@ -74,8 +76,8 @@ export function Window({
 
   function handleResizePointerDown(event: PointerEvent<HTMLElement>, dirX: number, dirY: number) {
     trackDrag(event, (dx, dy) => {
-      const newWidth = Math.max(MIN_WIDTH, width + dirX * dx);
-      const newHeight = Math.max(MIN_HEIGHT, height + dirY * dy);
+      const newWidth = Math.max(minSize.width, width + dirX * dx);
+      const newHeight = Math.max(minSize.height, height + dirY * dy);
       // a top or left edge moves the window so the opposite edge stays where it is
       onResize({
         x: dirX < 0 ? x + width - newWidth : x,
@@ -130,8 +132,8 @@ export function Window({
           <button type="button" aria-label="Close" onClick={onClose} />
         </div>
       </div>
-      {/* inset by the 3px frame, leaving each program to lay out its own content */}
-      <div className="mx-0.75 flex min-h-0 flex-1 flex-col overflow-auto">{children}</div>
+      {/* inset by the 3px frame so each program scrolls its own content */}
+      <div className="mx-0.75 flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
       {!isMaximized &&
         RESIZE_HANDLES.map((handle) => (
           <div

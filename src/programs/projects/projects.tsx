@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import folderSmallIcon from '../../assets/icons/folder-small.webp';
+import githubIcon from '../../assets/icons/github.svg';
 import { LINKS } from '../../content/profile';
 import { PROJECTS, type Project } from '../../content/projects';
-import { Explorer, ExplorerSection } from '../../organism/explorer/explorer';
+import { Explorer } from '../../organism/explorer/explorer';
 import { FolderTile } from '../../organism/folder-tile/folder-tile';
 import { TaskPaneDetails, TaskPaneGroup, TaskPaneLink } from '../../organism/task-pane/task-pane';
+import { ProjectPage } from './project-page';
 
-function TaskPane({ name }: Readonly<{ name: string }>) {
+function TaskPane({ project }: Readonly<{ project?: Project }>) {
   return (
     <>
       <TaskPaneGroup title="Other Places">
@@ -15,22 +17,14 @@ function TaskPane({ name }: Readonly<{ name: string }>) {
         ))}
       </TaskPaneGroup>
       <TaskPaneGroup title="Details">
-        <TaskPaneDetails name={name} details={['File Folder']} />
+        <TaskPaneDetails
+          name={project?.title ?? 'My Projects'}
+          details={['File Folder', ...(project?.details ?? [])]}
+        />
+        {project?.repos.map((repo) => (
+          <TaskPaneLink key={repo.title} {...repo} icon={githubIcon} />
+        ))}
       </TaskPaneGroup>
-    </>
-  );
-}
-
-function ProjectPage({ project }: Readonly<{ project: Project }>) {
-  return (
-    <>
-      <div className="p-4">
-        <img src={project.image} alt="" className="aspect-video w-full max-w-160" />
-      </div>
-      <ExplorerSection title="Overview" />
-      <ExplorerSection title="What I Built" />
-      <ExplorerSection title="Key Features" />
-      <ExplorerSection title="Built With" />
     </>
   );
 }
@@ -47,7 +41,7 @@ export function Projects() {
       addressIcon={folderSmallIcon}
       onBack={goToFolder}
       onUp={goToFolder}
-      taskPane={<TaskPane name={project?.title ?? 'My Projects'} />}
+      taskPane={<TaskPane project={project} />}
     >
       {project ? (
         <ProjectPage project={project} />

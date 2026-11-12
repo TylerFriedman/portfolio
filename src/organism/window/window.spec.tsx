@@ -16,6 +16,7 @@ function renderWindow(props: Partial<WindowProps> = {}) {
     <Window
       title="About Me"
       icon="/text-editor.png"
+      minSize={{ width: 200, height: 120 }}
       x={100}
       y={50}
       width={400}

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 390" width="640" height="390" shape-rendering="crispEdges" font-family="Tahoma, Verdana, sans-serif" font-size="11">
+  <!-- colours come from xp paint's default palette -->
+  <defs>
+    <!-- wobbles the shapes so they look drawn by mouse -->
+    <filter id="hand" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="head" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M0 0L8 4L0 8z" fill="#000000"/>
+    </marker>
+  </defs>
+  <rect width="640" height="390" fill="#ffffff"/>
+
+  <g filter="url(#hand)" stroke="#000000" stroke-width="2">
+    <!-- person -->
+    <g fill="none">
+      <circle cx="40" cy="14" r="7"/>
+      <path d="M40 21v16M30 27h20M40 37l-8 12M40 37l8 12"/>
+    </g>
+
+    <!-- zones -->
+    <rect x="10" y="70" width="200" height="270" fill="#ffffff"/>
+    <rect x="10" y="70" width="200" height="20" fill="#008000"/>
+    <rect x="230" y="70" width="180" height="270" fill="#ffffff"/>
+    <rect x="230" y="70" width="180" height="20" fill="#800000"/>
+    <rect x="430" y="70" width="200" height="270" fill="#ffffff"/>
+    <rect x="430" y="70" width="200" height="20" fill="#008080"/>
+
+    <!-- tracking boxes -->
+    <g fill="#ffff80">
+      <rect x="20" y="100" width="180" height="28"/>
+      <rect x="20" y="138" width="180" height="28"/>
+      <rect x="20" y="176" width="180" height="28"/>
+      <rect x="20" y="214" width="180" height="28"/>
+      <rect x="20" y="252" width="180" height="28"/>
+      <rect x="20" y="290" width="180" height="28"/>
+    </g>
+
+    <!-- firebase -->
+    <g fill="#ff8040">
+      <path d="M255 118v92a65 12 0 0 0 130 0v-92"/>
+      <ellipse cx="320" cy="118" rx="65" ry="12"/>
+    </g>
+    <rect x="250" y="252" width="140" height="56" fill="#ffffff"/>
+
+    <!-- insights boxes -->
+    <g fill="#80ffff">
+      <rect x="440" y="100" width="180" height="28"/>
+      <rect x="440" y="138" width="180" height="28"/>
+      <rect x="440" y="176" width="180" height="28"/>
+      <rect x="440" y="214" width="180" height="28"/>
+      <rect x="440" y="252" width="180" height="28"/>
+      <rect x="440" y="290" width="180" height="28"/>
+    </g>
+
+    <!-- connections -->
+    <g fill="none" marker-end="url(#head)">
+      <path d="M212 166H253"/>
+      <path d="M212 280H248"/>
+      <path d="M387 166H428"/>
+    </g>
+  </g>
+
+  <text x="58" y="32">Students</text>
+  <g fill="#ffffff" font-weight="bold" text-anchor="middle">
+    <text x="110" y="84">APP · TRACKING (Kotlin)</text>
+    <text x="320" y="84">FIREBASE</text>
+    <text x="530" y="84">APP · INSIGHTS (MPAndroidChart)</text>
+  </g>
+  <g text-anchor="middle">
+    <text x="110" y="118">Register + login</text>
+    <text x="110" y="156">Colour-coded categories</text>
+    <text x="110" y="194">Activities</text>
+    <text x="110" y="232">Daily min + max goals</text>
+    <text x="110" y="270">Log a session + photo</text>
+    <text x="110" y="308">View every log</text>
+    <text x="320" y="152" font-weight="bold">Auth</text>
+    <text x="320" y="168">Realtime Database</text>
+    <text x="320" y="182">categories, activities,</text>
+    <text x="320" y="196">sessions, goals</text>
+    <text x="320" y="276" font-weight="bold">Storage</text>
+    <text x="320" y="290">session photos</text>
+    <text x="530" y="118">Hours per day bar chart</text>
+    <text x="530" y="156">Min + max goal lines</text>
+    <text x="530" y="194">Goals pie chart</text>
+    <text x="530" y="232">Insights by date range</text>
+    <text x="530" y="270">Insights by category</text>
+    <text x="530" y="308">Points leaderboard</text>
+    <text x="320" y="368" fill="#808080">Every minute logged counts as one point on the leaderboard.</text>
+  </g>
+</svg>

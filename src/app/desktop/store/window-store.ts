@@ -56,12 +56,14 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
       set((s) => {
         // offset each new window so it never lands exactly on top of the last one
         const offset = CASCADE_STEP * (s.windows.length + 1);
+        const desktop = desktopSize();
         const opened: DesktopWindow = {
           id,
           x: offset,
           y: offset,
-          width: DEFAULT_WIDTH,
-          height: DEFAULT_HEIGHT,
+          // a small screen gets a smaller window rather than one that runs off the edge
+          width: Math.min(DEFAULT_WIDTH, desktop.width - offset),
+          height: Math.min(DEFAULT_HEIGHT, desktop.height - offset),
           isMinimized: false,
           isMaximized: false,
         };

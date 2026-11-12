@@ -122,7 +122,7 @@ export function Explorer({
         <aside className="bg-task-pane flex w-45 shrink-0 flex-col gap-3 overflow-auto p-2.5">
           {taskPane}
         </aside>
-        <div className="min-w-0 flex-1 overflow-auto bg-white">{children}</div>
+        <div className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto bg-white">{children}</div>
       </div>
     </div>
   );
@@ -137,7 +137,7 @@ export function ExplorerSection({ title, children }: Readonly<ExplorerSectionPro
   return (
     <section>
       <h2 className="text-xp pt-0.5 pb-0.75 pl-3 font-bold">{title}</h2>
-      <hr className="from-explorer-rule h-px w-75 border-0 bg-linear-to-r to-white" />
+      <hr className="from-explorer-rule h-px w-75 max-w-full border-0 bg-linear-to-r to-white" />
       <div className="p-4">{children}</div>
     </section>
   );

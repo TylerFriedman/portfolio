@@ -26,6 +26,7 @@
   --color-task-pane-group: #d6dff7;
   --color-task-pane-text: #215dc6;
   --color-task-pane-hover: #428eff;
+  --color-paint-workspace: #808080;
 
   --shadow-taskbar-button: inset -1px 0 rgb(0 0 0 / 0.3), inset 1px 1px 1px rgb(255 255 255 / 0.2);
   --shadow-taskbar-button-active:

@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ProgramId } from '../../../programs/registry';
 import { useActiveWindowId, useWindowStore } from './window-store';
 
@@ -10,6 +10,10 @@ const topWindow = () => useWindowStore.getState().focusOrder.at(-1);
 describe('window store', () => {
   beforeEach(() => {
     useWindowStore.setState(useWindowStore.getInitialState(), true);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('raises an already open program instead of opening a second window', () => {
@@ -93,6 +97,15 @@ describe('window store', () => {
     actions().resize('about', { x: 24, y: -50, width: 480, height: 434 });
 
     expect(windowFor('about')).toMatchObject({ y: 0, height: 384 });
+  });
+
+  it('opens no bigger than the space left on the desktop', () => {
+    vi.stubGlobal('innerWidth', 500);
+    vi.stubGlobal('innerHeight', 400);
+
+    actions().open('about');
+
+    expect(windowFor('about')).toMatchObject({ x: 24, y: 24, width: 476, height: 346 });
   });
 
   it('treats the front window as the active one', () => {
