@@ -1,4 +1,5 @@
 import folderIcon from '../../assets/icons/folder.webp';
+import { useTap } from '../../hooks/use-tap';
 
 interface FolderTileProps {
   name: string;
@@ -6,12 +7,16 @@ interface FolderTileProps {
   onOpen: () => void;
 }
 
-// a click only selects a folder and a double-click opens it, as in xp, with focus showing the selection
+// a click selects and a double-click opens, as in xp, but a finger has no double-click so a tap opens
 export function FolderTile({ name, description, onOpen }: Readonly<FolderTileProps>) {
+  const tap = useTap(onOpen);
+
   return (
     <button
       type="button"
       className="button-reset group flex w-50 items-center gap-1.5 text-left"
+      onPointerDown={tap.onPointerDown}
+      onClick={tap.onClick}
       onDoubleClick={onOpen}
       onKeyDown={(event) => {
         if (event.key === 'Enter') onOpen();

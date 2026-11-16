@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Window, type WindowProps } from './window';
 
 function renderWindow(props: Partial<WindowProps> = {}) {
@@ -41,6 +41,10 @@ function drag(element: Element, dx: number, dy: number) {
 }
 
 describe('Window', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('moves by the distance its title bar is dragged', () => {
     const { onMove } = renderWindow();
 
@@ -105,6 +109,23 @@ describe('Window', () => {
     drag(screen.getByText('About Me'), 30, 40);
 
     expect(onMove).not.toHaveBeenCalled();
+    expect(screen.queryByTestId(/^resize-/)).not.toBeInTheDocument();
+  });
+
+  it('can not be moved, resized or maximized on a small screen', async () => {
+    vi.spyOn(window, 'matchMedia').mockReturnValue(
+      Object.assign(new EventTarget(), { matches: true, media: '' }) as MediaQueryList,
+    );
+    const user = userEvent.setup();
+    const { onMove, onToggleMaximize } = renderWindow();
+    const title = screen.getByText('About Me');
+
+    drag(title, 30, 40);
+    await user.dblClick(title);
+
+    expect(onMove).not.toHaveBeenCalled();
+    expect(onToggleMaximize).not.toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: 'Maximize' })).not.toBeInTheDocument();
     expect(screen.queryByTestId(/^resize-/)).not.toBeInTheDocument();
   });
 

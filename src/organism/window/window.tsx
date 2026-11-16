@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useEffect, useRef, type PointerEvent, type ReactNode } from 'react';
+import { useIsMobile } from '../../hooks/use-is-mobile';
 import { trackDrag } from '../../utils/track-drag';
 
 interface Size {
@@ -62,6 +63,8 @@ export function Window({
   onResize,
 }: Readonly<WindowProps>) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const isMobile = useIsMobile();
+  const fillsScreen = isMaximized || isMobile;
 
   // the front window takes keyboard focus, as in xp, so keys stop reaching whatever is behind it
   useEffect(() => {
@@ -70,7 +73,7 @@ export function Window({
 
   function handleTitleBarPointerDown(event: PointerEvent<HTMLElement>) {
     // capturing the pointer from a button would swallow its click
-    if (isMaximized || (event.target instanceof Element && event.target.closest('button'))) return;
+    if (fillsScreen || (event.target instanceof Element && event.target.closest('button'))) return;
     trackDrag(event, (dx, dy) => onMove(x + dx, y + dy));
   }
 
@@ -99,9 +102,9 @@ export function Window({
       // flex only while open as it would override the browser hiding a closed dialog
       className={clsx(
         'window absolute flex-col outline-none open:flex',
-        isMaximized && 'inset-0 size-full',
+        fillsScreen && 'inset-0 size-full',
       )}
-      style={isMaximized ? { zIndex } : { zIndex, left: x, top: y, width, height }}
+      style={fillsScreen ? { zIndex } : { zIndex, left: x, top: y, width, height }}
       onPointerDown={onFocus}
     >
       <div
@@ -110,7 +113,7 @@ export function Window({
           !isActive && 'brightness-125 saturate-50',
         )}
         onPointerDown={handleTitleBarPointerDown}
-        onDoubleClick={onToggleMaximize}
+        onDoubleClick={isMobile ? undefined : onToggleMaximize}
       >
         <div className="title-bar-text flex items-center gap-1">
           <img
@@ -124,17 +127,19 @@ export function Window({
         </div>
         <div className="title-bar-controls">
           <button type="button" aria-label="Minimize" onClick={onMinimize} />
-          <button
-            type="button"
-            aria-label={isMaximized ? 'Restore' : 'Maximize'}
-            onClick={onToggleMaximize}
-          />
+          {!isMobile && (
+            <button
+              type="button"
+              aria-label={isMaximized ? 'Restore' : 'Maximize'}
+              onClick={onToggleMaximize}
+            />
+          )}
           <button type="button" aria-label="Close" onClick={onClose} />
         </div>
       </div>
       {/* inset by the 3px frame so each program scrolls its own content */}
       <div className="mx-0.75 flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
-      {!isMaximized &&
+      {!fillsScreen &&
         RESIZE_HANDLES.map((handle) => (
           <div
             key={handle.edge}

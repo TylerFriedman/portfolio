@@ -29,6 +29,18 @@ describe('FolderTile', () => {
     expect(onOpen).not.toHaveBeenCalled();
   });
 
+  it('opens on a single tap of a finger', async () => {
+    const user = userEvent.setup();
+    const onOpen = renderTile();
+
+    await user.pointer({
+      keys: '[TouchA]',
+      target: screen.getByRole('button', { name: /Fusion/ }),
+    });
+
+    expect(onOpen).toHaveBeenCalledOnce();
+  });
+
   it('opens with the enter key', async () => {
     const user = userEvent.setup();
     const onOpen = renderTile();

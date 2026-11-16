@@ -20,7 +20,7 @@ export function TaskbarButton({
       type="button"
       aria-pressed={isActive}
       className={clsx(
-        'button-reset flex h-full w-40 items-center gap-1.5 rounded-xs px-2 text-white focus-visible:outline-1 focus-visible:outline-white focus-visible:outline-dotted',
+        'button-reset flex h-full w-40 items-center gap-1.5 rounded-xs px-2 text-white focus-visible:outline-1 focus-visible:outline-white focus-visible:outline-dotted max-md:w-auto',
         isActive
           ? 'bg-taskbar-button-active shadow-taskbar-button-active'
           : 'bg-taskbar-button hover:bg-taskbar-button-hover shadow-taskbar-button',
@@ -29,7 +29,7 @@ export function TaskbarButton({
       onClick={isActive ? onMinimize : onActivate}
     >
       <img src={icon} alt="" className="size-4" />
-      <span className="truncate">{title}</span>
+      <span className="truncate max-md:sr-only">{title}</span>
     </button>
   );
 }

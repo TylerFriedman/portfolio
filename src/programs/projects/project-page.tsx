@@ -13,11 +13,16 @@ function BulletList({ items }: Readonly<{ items: string[] }>) {
 }
 
 export function ProjectPage({ project }: Readonly<{ project: Project }>) {
+  const diagramAlt = `${project.title} architecture diagram`;
+
   return (
     <>
       {project.image && (
         <div className="p-4">
-          <PaintWindow name={project.title} image={project.image} />
+          <div className="max-md:hidden">
+            <PaintWindow name={project.title} image={project.image} alt={diagramAlt} />
+          </div>
+          <img src={project.image} alt={diagramAlt} className="block w-full md:hidden" />
         </div>
       )}
       <ExplorerSection title="Overview">

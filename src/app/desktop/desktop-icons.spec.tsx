@@ -105,6 +105,20 @@ describe('DesktopIcons', () => {
     expect(openIds()).toEqual(['projects']);
   });
 
+  it('opens an icon with a single tap of a finger and never drags it', async () => {
+    const user = userEvent.setup();
+    renderIcons();
+
+    await user.pointer([
+      { keys: '[TouchA>]', target: icon('Projects'), coords: { clientX: 20, clientY: 20 } },
+      { pointerName: 'TouchA', target: icon('Projects'), coords: { clientX: 23, clientY: 21 } },
+      { keys: '[/TouchA]', target: icon('Projects') },
+    ]);
+
+    expect(openIds()).toEqual(['projects']);
+    expect(useIconStore.getState().cells).toEqual(useIconStore.getInitialState().cells);
+  });
+
   it('is a single tab stop', async () => {
     const user = userEvent.setup();
     renderIcons();

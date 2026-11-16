@@ -7,10 +7,11 @@ const MENUS = ['File', 'Edit', 'View', 'Image', 'Colors', 'Help'];
 interface PaintWindowProps {
   name: string;
   image: string;
+  alt: string;
 }
 
 // a still of paint so its chrome is for looks only
-export function PaintWindow({ name, image }: Readonly<PaintWindowProps>) {
+export function PaintWindow({ name, image, alt }: Readonly<PaintWindowProps>) {
   return (
     <div className="window font-xp text-xp w-full max-w-max">
       <div inert className="title-bar brightness-125 saturate-50">
@@ -34,7 +35,7 @@ export function PaintWindow({ name, image }: Readonly<PaintWindowProps>) {
       <div className="mx-0.75 flex">
         <img src={paintToolbox} alt="" className="shrink-0 self-start" />
         <div className="bg-paint-workspace min-w-0 flex-1 border border-t-black/50 border-r-white border-b-white border-l-black/50 p-0.75">
-          <img src={image} alt="" className="block w-full" />
+          <img src={image} alt={alt} className="block w-full" />
         </div>
       </div>
       <div className="mx-0.75 overflow-hidden py-1">

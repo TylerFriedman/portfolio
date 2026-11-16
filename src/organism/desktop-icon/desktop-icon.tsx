@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import type { KeyboardEvent, PointerEvent, Ref } from 'react';
+import { useTap } from '../../hooks/use-tap';
 
 interface DesktopIconProps {
   ref?: Ref<HTMLButtonElement>;
@@ -22,6 +23,8 @@ export function DesktopIcon({
   onKeyDown,
   onOpen,
 }: Readonly<DesktopIconProps>) {
+  const tap = useTap(onOpen);
+
   return (
     <button
       ref={ref}
@@ -30,7 +33,11 @@ export function DesktopIcon({
       // only the focused icon is a tab stop, the arrow keys reach the rest
       tabIndex={isFocused ? 0 : -1}
       className="button-reset group flex w-19 flex-col items-center gap-1"
-      onPointerDown={onPointerDown}
+      onPointerDown={(event) => {
+        tap.onPointerDown(event);
+        onPointerDown(event);
+      }}
+      onClick={tap.onClick}
       onKeyDown={onKeyDown}
       onDoubleClick={onOpen}
     >

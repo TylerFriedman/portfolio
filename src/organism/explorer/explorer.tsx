@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import type { ReactNode } from 'react';
 import addressDropdownIcon from '../../assets/icons/address-dropdown.webp';
 import backIcon from '../../assets/icons/back.webp';
@@ -39,7 +38,7 @@ function ToolbarButton({
       onClick={onClick}
     >
       <img src={icon} alt="" className={isLarge ? 'size-7.5' : 'mx-1 size-5.5'} />
-      <span className={clsx(!isLabelShown && 'sr-only')}>{label}</span>
+      <span className={isLabelShown ? 'max-md:sr-only' : 'sr-only'}>{label}</span>
       {hasMenu && (
         <span className="ml-1 border-x-3 border-t-3 border-x-transparent border-t-black" />
       )}
@@ -119,7 +118,7 @@ export function Explorer({
         </span>
       </div>
       <div className="flex min-h-0 flex-1 border border-t-0 border-black/40">
-        <aside className="bg-task-pane flex w-45 shrink-0 flex-col gap-3 overflow-auto p-2.5">
+        <aside className="bg-task-pane max-md:text-xp-small flex w-45 shrink-0 flex-col gap-3 overflow-auto p-2.5 max-md:w-32 max-md:p-1.5">
           {taskPane}
         </aside>
         <div className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto bg-white">{children}</div>

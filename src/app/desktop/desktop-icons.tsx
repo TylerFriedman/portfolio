@@ -48,6 +48,11 @@ export function DesktopIcons() {
       toggle(id);
       return;
     }
+    // a finger taps to open, so a few pixels of wobble never drag the icon
+    if (event.pointerType === 'touch') {
+      select(id);
+      return;
+    }
     // pressing an icon in the selection drags the whole selection, as in xp
     if (!selectedIds.includes(id)) select(id);
     startDrag(event, (dx, dy) => {
