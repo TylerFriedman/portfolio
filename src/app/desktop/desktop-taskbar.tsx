@@ -2,7 +2,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useClock } from '../../hooks/use-clock';
 import { TaskbarButton } from '../../organism/taskbar-button/taskbar-button';
 import { Taskbar } from '../../organism/taskbar/taskbar';
-import { PROGRAMS } from '../../programs/registry';
+import { PROGRAMS, windowTitle } from '../../programs/registry';
 import { DesktopStartMenu } from './desktop-start-menu';
 import { useActiveWindowId, useWindowActions, useWindowStore } from './store/window-store';
 
@@ -18,7 +18,7 @@ export function DesktopTaskbar() {
       {windowIds.map((id) => (
         <li key={id}>
           <TaskbarButton
-            title={PROGRAMS[id].title}
+            title={windowTitle(id)}
             icon={PROGRAMS[id].icon}
             isActive={id === activeId}
             onActivate={() => focus(id)}

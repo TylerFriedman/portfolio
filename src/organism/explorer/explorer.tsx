@@ -7,48 +7,8 @@ import goIcon from '../../assets/icons/go.webp';
 import searchIcon from '../../assets/icons/search.webp';
 import upIcon from '../../assets/icons/up.webp';
 import viewsIcon from '../../assets/icons/views.webp';
-import windowsFlag from '../../assets/icons/windows-flag.webp';
-
-const MENUS = ['File', 'Edit', 'View', 'Favorites', 'Tools', 'Help'];
-
-interface ToolbarButtonProps {
-  icon: string;
-  label: string;
-  isLabelShown?: boolean;
-  isLarge?: boolean;
-  hasMenu?: boolean;
-  isDisabled?: boolean;
-  onClick?: () => void;
-}
-
-function ToolbarButton({
-  icon,
-  label,
-  isLabelShown,
-  isLarge,
-  hasMenu,
-  isDisabled,
-  onClick,
-}: Readonly<ToolbarButtonProps>) {
-  return (
-    <button
-      type="button"
-      disabled={isDisabled}
-      className="button-reset enabled:hover:shadow-toolbar-button flex h-full items-center rounded-sm border border-transparent pr-1 enabled:hover:border-black/10 enabled:active:border-black/30 enabled:active:bg-black/10 enabled:active:*:translate-px disabled:opacity-70 disabled:grayscale"
-      onClick={onClick}
-    >
-      <img src={icon} alt="" className={isLarge ? 'size-7.5' : 'mx-1 size-5.5'} />
-      <span className={isLabelShown ? 'max-md:sr-only' : 'sr-only'}>{label}</span>
-      {hasMenu && (
-        <span className="ml-1 border-x-3 border-t-3 border-x-transparent border-t-black" />
-      )}
-    </button>
-  );
-}
-
-function ToolbarSeparator() {
-  return <span className="mx-0.5 h-8 w-px bg-black/20" />;
-}
+import { MenuBar } from '../menu-bar/menu-bar';
+import { ToolbarButton, ToolbarSeparator } from '../toolbar/toolbar';
 
 interface ExplorerProps {
   address: string;
@@ -70,37 +30,24 @@ export function Explorer({
 }: Readonly<ExplorerProps>) {
   return (
     <div className="bg-explorer font-xp text-xp flex min-h-0 flex-1 flex-col">
-      <div aria-hidden className="flex h-6 shrink-0 border-b border-white/70">
-        <ul className="flex flex-1 items-center border-r border-b border-black/10 px-0.5">
-          {MENUS.map((menu) => (
-            <li key={menu} className="px-1.5">
-              {menu}
-            </li>
-          ))}
-        </ul>
-        <img
-          src={windowsFlag}
-          alt=""
-          className="border-b border-l border-b-black/10 border-l-white"
-        />
-      </div>
+      <MenuBar menus={['File', 'Edit', 'View', 'Favorites', 'Tools', 'Help']} />
       <div className="flex h-9 shrink-0 items-center border-b border-black/10 px-0.75 pt-px">
         <ToolbarButton
           icon={backIcon}
           label="Back"
-          isLabelShown
-          isLarge
+          labelPosition="beside"
+          iconSize="large"
           hasMenu
           isDisabled={!onBack}
           onClick={onBack}
         />
-        <ToolbarButton icon={forwardIcon} label="Forward" isLarge hasMenu isDisabled />
+        <ToolbarButton icon={forwardIcon} label="Forward" iconSize="large" hasMenu isDisabled />
         <ToolbarButton icon={upIcon} label="Up" isDisabled={!onUp} onClick={onUp} />
         <ToolbarSeparator />
         {/* shown for the look of xp only, so they are kept out of reach */}
         <div inert className="flex h-full items-center">
-          <ToolbarButton icon={searchIcon} label="Search" isLabelShown />
-          <ToolbarButton icon={foldersIcon} label="Folders" isLabelShown />
+          <ToolbarButton icon={searchIcon} label="Search" labelPosition="beside" />
+          <ToolbarButton icon={foldersIcon} label="Folders" labelPosition="beside" />
           <ToolbarSeparator />
           <ToolbarButton icon={viewsIcon} label="Views" hasMenu />
         </div>

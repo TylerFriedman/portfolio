@@ -13,6 +13,11 @@ dist-ssr
 *.local
 .vitest
 
+# env files hold keys, so only the example with empty values is shared
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

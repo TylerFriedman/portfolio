@@ -1,5 +1,5 @@
 import { Window } from '../../organism/window/window';
-import { PROGRAMS } from '../../programs/registry';
+import { PROGRAMS, windowTitle } from '../../programs/registry';
 import { useActiveWindowId, useWindowActions, useWindowStore } from './store/window-store';
 
 export function DesktopWindows() {
@@ -11,11 +11,11 @@ export function DesktopWindows() {
   return (
     <>
       {windows.map((w) => {
-        const { title, icon, component: Program, minSize } = PROGRAMS[w.id];
+        const { icon, component: Program, minSize } = PROGRAMS[w.id];
         return (
           <Window
             key={w.id}
-            title={title}
+            title={windowTitle(w.id)}
             icon={icon}
             minSize={minSize}
             x={w.x}
