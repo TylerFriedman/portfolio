@@ -19,7 +19,7 @@ describe('Desktop', () => {
     await user.tab();
     await user.keyboard('{ArrowDown}{Enter}{ArrowDown}');
 
-    expect(screen.getByRole('dialog', { name: 'Resume' })).toHaveFocus();
+    expect(screen.getByRole('dialog', { name: 'Resume Properties' })).toHaveFocus();
     expect(icons.getByRole('button', { name: 'Resume', pressed: true })).toBeInTheDocument();
   });
 

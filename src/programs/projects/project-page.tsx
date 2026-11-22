@@ -1,16 +1,7 @@
 import type { Project } from '../../content/projects';
+import { BulletList } from '../../organism/bullet-list/bullet-list';
 import { ExplorerSection } from '../../organism/explorer/explorer';
 import { PaintWindow } from '../../organism/paint-window/paint-window';
-
-function BulletList({ items }: Readonly<{ items: string[] }>) {
-  return (
-    <ul className="max-w-160 list-disc space-y-1 pl-4">
-      {items.map((item) => (
-        <li key={item}>{item}</li>
-      ))}
-    </ul>
-  );
-}
 
 export function ProjectPage({ project }: Readonly<{ project: Project }>) {
   const diagramAlt = `${project.title} architecture diagram`;

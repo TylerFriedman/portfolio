@@ -25,6 +25,17 @@ describe('window store', () => {
     expect(topWindow()).toBe('about');
   });
 
+  it('opens a dialog at its own size and other programs at the default', () => {
+    vi.stubGlobal('innerWidth', 1280);
+    vi.stubGlobal('innerHeight', 800);
+
+    actions().open('resume');
+    actions().open('projects');
+
+    expect(windowFor('resume')).toMatchObject({ width: 460, height: 480 });
+    expect(windowFor('projects')).toMatchObject({ width: 640, height: 480 });
+  });
+
   it('cascades new windows so they never cover each other exactly', () => {
     actions().open('about');
     actions().open('resume');

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ProgramId } from '../../../programs/registry';
+import { openSize, type ProgramId } from '../../../programs/registry';
 import { clamp } from '../../../utils/clamp';
 import { desktopSize } from '../layout';
 
@@ -28,8 +28,6 @@ interface WindowStore {
 }
 
 const CASCADE_STEP = 24;
-const DEFAULT_WIDTH = 640;
-const DEFAULT_HEIGHT = 480;
 const VISIBLE_EDGE = 48;
 
 function patch(
@@ -57,13 +55,14 @@ export const useWindowStore = create<WindowStore>()((set, get) => ({
         // offset each new window so it never lands exactly on top of the last one
         const offset = CASCADE_STEP * (s.windows.length + 1);
         const desktop = desktopSize();
+        const size = openSize(id);
         const opened: DesktopWindow = {
           id,
           x: offset,
           y: offset,
           // a small screen gets a smaller window rather than one that runs off the edge
-          width: Math.min(DEFAULT_WIDTH, desktop.width - offset),
-          height: Math.min(DEFAULT_HEIGHT, desktop.height - offset),
+          width: Math.min(size.width, desktop.width - offset),
+          height: Math.min(size.height, desktop.height - offset),
           isMinimized: false,
           isMaximized: false,
         };

@@ -5,7 +5,6 @@
 @theme {
   --font-start: 'Segoe UI', 'Trebuchet MS', sans-serif;
   --font-xp: 'Pixelated MS Sans Serif', Arial, sans-serif;
-
   --text-xp: 11px;
   --text-xp-small: 9px;
 
@@ -147,4 +146,40 @@
 
 @utility bg-task-pane-header {
   background-image: linear-gradient(to right, #fff 50%, #c6d3f7);
+}
+
+@utility xp-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 75px;
+  min-height: 23px;
+  padding: 0 12px;
+  border: 1px solid #003c74;
+  border-radius: 3px;
+  background-image: linear-gradient(#fff, #ecebe5 86%, #d8d0c4);
+  color: #000;
+
+  &:hover {
+    box-shadow:
+      inset -1px 1px #fff0cf,
+      inset 1px 2px #fdd889,
+      inset -2px 2px #fbc761,
+      inset 2px -2px #e5a01a;
+  }
+
+  &:active {
+    box-shadow: none;
+    background-image: linear-gradient(#cdcac3, #e3e3db 8%, #e5e5de 94%, #f2f2f1);
+  }
+
+  /* xp.css outlines every focused link, but a button only shows it from the keyboard */
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 1px dotted #000;
+    outline-offset: -4px;
+  }
 }
