@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Contact } from './contact';
@@ -32,7 +32,9 @@ describe('Contact', () => {
       subject: 'Hello',
       message: 'Nice portfolio',
     });
-    expect(await screen.findByRole('status')).toHaveTextContent('Your message has been sent.');
+    await waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent('Your message has been sent.'),
+    );
     expect(screen.getByLabelText('From:')).toHaveValue('');
   });
 
@@ -43,7 +45,7 @@ describe('Contact', () => {
 
     await writeMessage(user);
 
-    expect(await screen.findByRole('status')).toHaveTextContent('could not be sent');
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('could not be sent'));
     expect(screen.getByLabelText('From:')).toHaveValue('jane@example.com');
     expect(screen.getByRole('textbox', { name: 'Message' })).toHaveValue('Nice portfolio');
   });

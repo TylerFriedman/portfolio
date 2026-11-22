@@ -5,7 +5,7 @@ import { useWindowActions } from './store/window-store';
 
 // pinned programs sit on the left and documents on the right, like xp's my documents
 const PINNED: { id: ProgramId; description: string }[] = [
-  { id: 'about', description: 'Who I am' },
+  { id: 'notepad', description: 'Write a note' },
   { id: 'contact', description: 'Get in touch' },
 ];
 const PLACES: { id: ProgramId; title: string }[] = [

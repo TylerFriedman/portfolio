@@ -38,14 +38,17 @@ describe('Desktop', () => {
     },
   );
 
-  it('names the contact window after what is open in it, as xp does', async () => {
+  it.each([
+    ['Contact', 'New Message'],
+    ['Notepad', 'Untitled - Notepad'],
+  ])('names the %s window after what is open in it, as xp does', async (icon, title) => {
     const user = userEvent.setup();
     render(<Desktop />);
     const icons = within(screen.getByRole('list', { name: 'Desktop' }));
 
-    await user.dblClick(icons.getByRole('button', { name: 'Contact' }));
+    await user.dblClick(icons.getByRole('button', { name: icon }));
 
-    expect(screen.getByRole('dialog', { name: 'New Message' })).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: title })).toBeInTheDocument();
   });
 
   it('leaves focus alone when the page loads', () => {

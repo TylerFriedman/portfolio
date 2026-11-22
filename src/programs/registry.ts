@@ -5,7 +5,7 @@ import outlookExpressIcon from '../assets/icons/outlook-express.webp';
 import systemPropertiesIcon from '../assets/icons/system-properties.webp';
 import type { WindowProps } from '../organism/window/window';
 import { Contact } from './contact/contact';
-import { Placeholder } from './placeholder';
+import { Notepad } from './notepad/notepad';
 import { Projects } from './projects/projects';
 import { Resume } from './resume/resume';
 
@@ -19,10 +19,11 @@ interface Program {
 }
 
 export const PROGRAMS = {
-  about: {
-    title: 'About Me',
+  notepad: {
+    title: 'Notepad',
+    windowTitle: 'Untitled - Notepad',
     icon: notepadIcon,
-    component: Placeholder,
+    component: Notepad,
     minSize: { width: 200, height: 160 },
   },
   resume: {

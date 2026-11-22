@@ -32,18 +32,18 @@ describe('DesktopIcons', () => {
   it('drags an icon to a new spot on the grid', () => {
     renderIcons();
 
-    fireEvent.pointerDown(icon('About Me'), { button: 0, clientX: 20, clientY: 20 });
-    fireEvent.pointerMove(icon('About Me'), { clientX: 20 + 92 * 2, clientY: 20 + 84 * 5 });
-    fireEvent.pointerUp(icon('About Me'), { clientX: 20 + 92 * 2, clientY: 20 + 84 * 5 });
+    fireEvent.pointerDown(icon('Notepad'), { button: 0, clientX: 20, clientY: 20 });
+    fireEvent.pointerMove(icon('Notepad'), { clientX: 20 + 92 * 2, clientY: 20 + 84 * 5 });
+    fireEvent.pointerUp(icon('Notepad'), { clientX: 20 + 92 * 2, clientY: 20 + 84 * 5 });
 
-    expect(useIconStore.getState().cells.about).toEqual({ col: 2, row: 5 });
+    expect(useIconStore.getState().cells.notepad).toEqual({ col: 2, row: 5 });
   });
 
   it('narrows a selection down to the icon that is clicked', async () => {
     const user = userEvent.setup();
     renderIcons();
 
-    await user.click(icon('About Me'));
+    await user.click(icon('Notepad'));
     await user.keyboard('{Control>}a{/Control}');
     await user.click(icon('Resume'));
     await user.keyboard('{Enter}');
@@ -62,7 +62,7 @@ describe('DesktopIcons', () => {
     ]);
     await user.keyboard('{Enter}');
 
-    expect(openIds()).toEqual(['about', 'resume']);
+    expect(openIds()).toEqual(['notepad', 'resume']);
   });
 
   it('keeps the drag rectangle inside the desktop so it never covers the taskbar', () => {
@@ -78,22 +78,22 @@ describe('DesktopIcons', () => {
     const user = userEvent.setup();
     renderIcons();
 
-    await user.click(icon('About Me'));
+    await user.click(icon('Notepad'));
     await user.keyboard('{Control>}');
     await user.click(icon('Contact'));
     await user.keyboard('{/Control}{Enter}');
 
-    expect(openIds()).toEqual(['about', 'contact']);
+    expect(openIds()).toEqual(['notepad', 'contact']);
   });
 
   it('selects every icon with ctrl+a', async () => {
     const user = userEvent.setup();
     renderIcons();
 
-    await user.click(icon('About Me'));
+    await user.click(icon('Notepad'));
     await user.keyboard('{Control>}a{/Control}{Enter}');
 
-    expect(openIds()).toEqual(['about', 'resume', 'projects', 'contact']);
+    expect(openIds()).toEqual(['notepad', 'resume', 'projects', 'contact']);
   });
 
   it('opens only the icon that is double-clicked', async () => {
@@ -124,7 +124,7 @@ describe('DesktopIcons', () => {
     renderIcons();
 
     await user.tab();
-    expect(icon('About Me')).toHaveFocus();
+    expect(icon('Notepad')).toHaveFocus();
 
     await user.tab();
     expect(document.body).toHaveFocus();
@@ -145,21 +145,21 @@ describe('DesktopIcons', () => {
     const user = userEvent.setup();
     renderIcons();
 
-    await user.click(icon('About Me'));
+    await user.click(icon('Notepad'));
     await user.keyboard('{ArrowUp}{ArrowLeft}');
 
-    expect(selectedNames()).toEqual(['About Me']);
-    expect(icon('About Me')).toHaveFocus();
+    expect(selectedNames()).toEqual(['Notepad']);
+    expect(icon('Notepad')).toHaveFocus();
   });
 
   it('picks icons one by one with ctrl+arrow and space', async () => {
     const user = userEvent.setup();
     renderIcons();
 
-    await user.click(icon('About Me'));
+    await user.click(icon('Notepad'));
     await user.keyboard('{Control>}{ArrowDown}{ArrowDown}[Space]{/Control}');
 
-    expect(selectedNames()).toEqual(['About Me', 'Projects']);
+    expect(selectedNames()).toEqual(['Notepad', 'Projects']);
     expect(icon('Projects')).toHaveFocus();
   });
 
@@ -167,9 +167,9 @@ describe('DesktopIcons', () => {
     const user = userEvent.setup();
     renderIcons();
 
-    await user.click(icon('About Me'));
+    await user.click(icon('Notepad'));
     await user.keyboard('{Shift>}{ArrowDown}{ArrowDown}{/Shift}');
 
-    expect(selectedNames()).toEqual(['About Me', 'Resume', 'Projects']);
+    expect(selectedNames()).toEqual(['Notepad', 'Resume', 'Projects']);
   });
 });

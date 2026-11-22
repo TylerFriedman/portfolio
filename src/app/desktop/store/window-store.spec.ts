@@ -17,12 +17,12 @@ describe('window store', () => {
   });
 
   it('raises an already open program instead of opening a second window', () => {
-    actions().open('about');
+    actions().open('notepad');
     actions().open('resume');
-    actions().open('about');
+    actions().open('notepad');
 
-    expect(useWindowStore.getState().windows.map((w) => w.id)).toEqual(['about', 'resume']);
-    expect(topWindow()).toBe('about');
+    expect(useWindowStore.getState().windows.map((w) => w.id)).toEqual(['notepad', 'resume']);
+    expect(topWindow()).toBe('notepad');
   });
 
   it('opens a dialog at its own size and other programs at the default', () => {
@@ -37,106 +37,106 @@ describe('window store', () => {
   });
 
   it('cascades new windows so they never cover each other exactly', () => {
-    actions().open('about');
+    actions().open('notepad');
     actions().open('resume');
 
-    expect(windowFor('resume')?.x).toBeGreaterThan(windowFor('about')?.x ?? Infinity);
-    expect(windowFor('resume')?.y).toBeGreaterThan(windowFor('about')?.y ?? Infinity);
+    expect(windowFor('resume')?.x).toBeGreaterThan(windowFor('notepad')?.x ?? Infinity);
+    expect(windowFor('resume')?.y).toBeGreaterThan(windowFor('notepad')?.y ?? Infinity);
   });
 
   it('keeps the taskbar order when focus changes', () => {
-    actions().open('about');
+    actions().open('notepad');
     actions().open('resume');
-    actions().focus('about');
+    actions().focus('notepad');
 
-    expect(useWindowStore.getState().windows.map((w) => w.id)).toEqual(['about', 'resume']);
+    expect(useWindowStore.getState().windows.map((w) => w.id)).toEqual(['notepad', 'resume']);
   });
 
   it('hands focus to the window below when the top one is minimized', () => {
-    actions().open('about');
+    actions().open('notepad');
     actions().open('resume');
     actions().minimize('resume');
 
-    expect(topWindow()).toBe('about');
+    expect(topWindow()).toBe('notepad');
   });
 
   it('hands focus to the window below when the top one is closed', () => {
-    actions().open('about');
+    actions().open('notepad');
     actions().open('resume');
     actions().close('resume');
 
     expect(windowFor('resume')).toBeUndefined();
-    expect(topWindow()).toBe('about');
+    expect(topWindow()).toBe('notepad');
   });
 
   it('restores a minimized window when its program is opened again', () => {
-    actions().open('about');
-    actions().minimize('about');
-    actions().open('about');
+    actions().open('notepad');
+    actions().minimize('notepad');
+    actions().open('notepad');
 
-    expect(windowFor('about')?.isMinimized).toBe(false);
-    expect(topWindow()).toBe('about');
+    expect(windowFor('notepad')?.isMinimized).toBe(false);
+    expect(topWindow()).toBe('notepad');
   });
 
   it('brings a maximized window back maximized after it was minimized', () => {
-    actions().open('about');
-    actions().toggleMaximize('about');
-    actions().minimize('about');
-    actions().focus('about');
+    actions().open('notepad');
+    actions().toggleMaximize('notepad');
+    actions().minimize('notepad');
+    actions().focus('notepad');
 
-    expect(windowFor('about')).toMatchObject({ isMinimized: false, isMaximized: true });
+    expect(windowFor('notepad')).toMatchObject({ isMinimized: false, isMaximized: true });
   });
 
   it('keeps 48px of a window on screen when it is dragged past the edge', () => {
-    actions().open('about');
+    actions().open('notepad');
 
-    actions().move('about', -5000, -5000);
-    const dragged = windowFor('about');
+    actions().move('notepad', -5000, -5000);
+    const dragged = windowFor('notepad');
     expect(dragged?.y).toBe(0);
     expect((dragged?.x ?? 0) + (dragged?.width ?? 0)).toBe(48);
 
     // the bottom limit also clears the 30px taskbar
-    actions().move('about', 5000, 5000);
-    expect(windowFor('about')).toMatchObject({
+    actions().move('notepad', 5000, 5000);
+    expect(windowFor('notepad')).toMatchObject({
       x: window.innerWidth - 48,
       y: window.innerHeight - 30 - 48,
     });
   });
 
   it('stops the top edge at the top of the desktop without moving the bottom', () => {
-    actions().open('about');
-    actions().resize('about', { x: 24, y: -50, width: 480, height: 434 });
+    actions().open('notepad');
+    actions().resize('notepad', { x: 24, y: -50, width: 480, height: 434 });
 
-    expect(windowFor('about')).toMatchObject({ y: 0, height: 384 });
+    expect(windowFor('notepad')).toMatchObject({ y: 0, height: 384 });
   });
 
   it('opens no bigger than the space left on the desktop', () => {
     vi.stubGlobal('innerWidth', 500);
     vi.stubGlobal('innerHeight', 400);
 
-    actions().open('about');
+    actions().open('notepad');
 
-    expect(windowFor('about')).toMatchObject({ x: 24, y: 24, width: 476, height: 346 });
+    expect(windowFor('notepad')).toMatchObject({ x: 24, y: 24, width: 476, height: 346 });
   });
 
   it('treats the front window as the active one', () => {
     const { result } = renderHook(() => useActiveWindowId());
 
     act(() => {
-      actions().open('about');
+      actions().open('notepad');
       actions().open('resume');
-      actions().focus('about');
+      actions().focus('notepad');
     });
 
-    expect(result.current).toBe('about');
+    expect(result.current).toBe('notepad');
   });
 
   it('has no active window once every window is minimized', () => {
     const { result } = renderHook(() => useActiveWindowId());
 
     act(() => {
-      actions().open('about');
-      actions().minimize('about');
+      actions().open('notepad');
+      actions().minimize('notepad');
     });
 
     expect(result.current).toBeNull();

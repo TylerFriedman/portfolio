@@ -58,7 +58,10 @@ export function OutlookExpress({
 }: Readonly<OutlookExpressProps>) {
   return (
     <form className="bg-explorer font-xp text-xp flex min-h-0 flex-1 flex-col" onSubmit={onSubmit}>
-      <MenuBar menus={['File', 'Edit', 'View', 'Insert', 'Format', 'Tools', 'Message', 'Help']} />
+      <MenuBar
+        menus={['File', 'Edit', 'View', 'Insert', 'Format', 'Tools', 'Message', 'Help']}
+        hasFlag
+      />
       <div className="flex h-12 shrink-0 items-center overflow-hidden border-b border-black/10 px-0.75 py-0.5">
         <OutlookButton icon={sendIcon} label="Send" type="submit" isDisabled={isSending} />
         <ToolbarSeparator />

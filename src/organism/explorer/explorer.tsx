@@ -30,7 +30,7 @@ export function Explorer({
 }: Readonly<ExplorerProps>) {
   return (
     <div className="bg-explorer font-xp text-xp flex min-h-0 flex-1 flex-col">
-      <MenuBar menus={['File', 'Edit', 'View', 'Favorites', 'Tools', 'Help']} />
+      <MenuBar menus={['File', 'Edit', 'View', 'Favorites', 'Tools', 'Help']} hasFlag />
       <div className="flex h-9 shrink-0 items-center border-b border-black/10 px-0.75 pt-px">
         <ToolbarButton
           icon={backIcon}
@@ -54,7 +54,7 @@ export function Explorer({
       </div>
       <div className="flex h-5.5 shrink-0 items-center border-t border-white/70 px-0.5">
         <span className="px-1.25 text-black/50">Address</span>
-        <p className="border-address-border relative flex h-full flex-1 items-center gap-1 border bg-white pl-0.5">
+        <p className="border-field-border relative flex h-full flex-1 items-center gap-1 border bg-white pl-0.5">
           <img src={addressIcon} alt="" className="size-3.5" />
           <span className="truncate">{address}</span>
           <img src={addressDropdownIcon} alt="" className="absolute right-px h-4.5" />

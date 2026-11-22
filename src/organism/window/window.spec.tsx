@@ -14,7 +14,7 @@ function renderWindow(props: Partial<WindowProps> = {}) {
   };
   render(
     <Window
-      title="About Me"
+      title="Notepad"
       icon="/text-editor.png"
       minSize={{ width: 200, height: 120 }}
       x={100}
@@ -48,14 +48,14 @@ describe('Window', () => {
   it('moves by the distance its title bar is dragged', () => {
     const { onMove } = renderWindow();
 
-    drag(screen.getByText('About Me'), 30, 40);
+    drag(screen.getByText('Notepad'), 30, 40);
 
     expect(onMove).toHaveBeenCalledWith(130, 90);
   });
 
   it('stops following the pointer once it is released', () => {
     const { onMove } = renderWindow();
-    const title = screen.getByText('About Me');
+    const title = screen.getByText('Notepad');
 
     drag(title, 30, 40);
     fireEvent.pointerMove(title, { clientX: 500, clientY: 500 });
@@ -106,7 +106,7 @@ describe('Window', () => {
   it('can not be moved or resized while maximized', () => {
     const { onMove } = renderWindow({ isMaximized: true });
 
-    drag(screen.getByText('About Me'), 30, 40);
+    drag(screen.getByText('Notepad'), 30, 40);
 
     expect(onMove).not.toHaveBeenCalled();
     expect(screen.queryByTestId(/^resize-/)).not.toBeInTheDocument();
@@ -118,7 +118,7 @@ describe('Window', () => {
     );
     const user = userEvent.setup();
     const { onMove, onToggleMaximize } = renderWindow();
-    const title = screen.getByText('About Me');
+    const title = screen.getByText('Notepad');
 
     drag(title, 30, 40);
     await user.dblClick(title);
@@ -155,7 +155,7 @@ describe('Window', () => {
     const user = userEvent.setup();
     const { onToggleMaximize } = renderWindow();
 
-    await user.dblClick(screen.getByText('About Me'));
+    await user.dblClick(screen.getByText('Notepad'));
 
     expect(onToggleMaximize).toHaveBeenCalledOnce();
   });
@@ -170,13 +170,13 @@ describe('Window', () => {
   it('takes keyboard focus when it becomes the front window', () => {
     renderWindow();
 
-    expect(screen.getByRole('dialog', { name: 'About Me' })).toHaveFocus();
+    expect(screen.getByRole('dialog', { name: 'Notepad' })).toHaveFocus();
   });
 
   it('leaves keyboard focus alone while it is behind another window', () => {
     renderWindow({ isActive: false });
 
-    expect(screen.getByRole('dialog', { name: 'About Me' })).not.toHaveFocus();
+    expect(screen.getByRole('dialog', { name: 'Notepad' })).not.toHaveFocus();
   });
 
   it('comes to the front when clicked anywhere inside', () => {

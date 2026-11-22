@@ -4,17 +4,17 @@ import { describe, expect, it, vi } from 'vitest';
 import { StartMenu } from './start-menu';
 
 function renderStartMenu() {
-  const handlers = { onOpenAbout: vi.fn(), onOpenProjects: vi.fn() };
+  const handlers = { onOpenNotepad: vi.fn(), onOpenProjects: vi.fn() };
   render(
     <StartMenu
       userName="Tyler"
       userPicture="/tyler.webp"
       programs={[
         {
-          title: 'About Me',
-          description: 'Who I am',
+          title: 'Notepad',
+          description: 'Write a note',
           icon: '/notepad.webp',
-          onOpen: handlers.onOpenAbout,
+          onOpen: handlers.onOpenNotepad,
         },
       ]}
       places={[{ title: 'My Projects', icon: '/folder.webp', onOpen: handlers.onOpenProjects }]}
@@ -28,11 +28,11 @@ function renderStartMenu() {
 describe('StartMenu', () => {
   it('opens a pinned program from the left column', async () => {
     const user = userEvent.setup();
-    const { onOpenAbout, onOpenProjects } = renderStartMenu();
+    const { onOpenNotepad, onOpenProjects } = renderStartMenu();
 
-    await user.click(screen.getByRole('button', { name: /About Me/, hidden: true }));
+    await user.click(screen.getByRole('button', { name: /Notepad/, hidden: true }));
 
-    expect(onOpenAbout).toHaveBeenCalledOnce();
+    expect(onOpenNotepad).toHaveBeenCalledOnce();
     expect(onOpenProjects).not.toHaveBeenCalled();
   });
 

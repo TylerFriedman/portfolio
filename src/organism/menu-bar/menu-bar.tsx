@@ -1,6 +1,11 @@
 import windowsFlag from '../../assets/icons/windows-flag.webp';
 
-export function MenuBar({ menus }: Readonly<{ menus: string[] }>) {
+interface MenuBarProps {
+  menus: string[];
+  hasFlag?: boolean;
+}
+
+export function MenuBar({ menus, hasFlag }: Readonly<MenuBarProps>) {
   return (
     <div aria-hidden className="flex h-6 shrink-0 border-b border-white/70">
       <ul className="flex flex-1 items-center overflow-hidden border-r border-b border-black/10 px-0.5">
@@ -10,11 +15,13 @@ export function MenuBar({ menus }: Readonly<{ menus: string[] }>) {
           </li>
         ))}
       </ul>
-      <img
-        src={windowsFlag}
-        alt=""
-        className="border-b border-l border-b-black/10 border-l-white"
-      />
+      {hasFlag && (
+        <img
+          src={windowsFlag}
+          alt=""
+          className="border-b border-l border-b-black/10 border-l-white"
+        />
+      )}
     </div>
   );
 }
