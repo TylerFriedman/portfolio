@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 /* layered so tailwind utilities still win over the xp element styles */
 @import 'xp.css/dist/XP.css' layer(components);
+/* a franklin gothic revival for devices without the windows font */
+@import '@fontsource-variable/libre-franklin';
+@import '@fontsource-variable/libre-franklin/wght-italic.css';
 
 @theme {
   --font-start: 'Segoe UI', 'Trebuchet MS', sans-serif;
@@ -10,6 +13,10 @@
   --font-notepad: 'Lucida Console', monospace;
   --text-notepad: 13px;
   --text-notepad--line-height: 14px;
+  --font-logon: 'Franklin Gothic Medium', 'Libre Franklin Variable', sans-serif;
+  --font-logon-book: 'Franklin Gothic Book', 'Libre Franklin Variable', sans-serif;
+  --font-logon-small: Tahoma, sans-serif;
+  --font-logo: Helvetica, Arial, sans-serif;
 
   --color-desktop: #004e98;
   --color-highlight: #316ac5;
@@ -30,6 +37,12 @@
   --color-task-pane-text: #215dc6;
   --color-task-pane-hover: #428eff;
   --color-paint-workspace: #808080;
+  --color-boot-bar-border: #b1b1b1;
+  --color-boot-bar-ring: #3e3e3e;
+  --color-logon: #5a7edc;
+  --color-logon-band: #00309c;
+  --color-logon-picture-hot: #ffee00;
+  --color-logon-picture-hot-border: #ffb600;
 
   --shadow-taskbar-button: inset -1px 0 rgb(0 0 0 / 0.3), inset 1px 1px 1px rgb(255 255 255 / 0.2);
   --shadow-taskbar-button-active:
@@ -37,8 +50,39 @@
   --shadow-tray: inset 1px 0 1px #18bbff;
   --shadow-start-menu: 2px 4px 2px rgb(0 0 0 / 0.5);
   --shadow-toolbar-button: inset 0 -1px 1px rgb(0 0 0 / 0.1);
+  --shadow-logon-picture: 2px 2px 3px rgb(10 30 100 / 0.4);
 
   --text-shadow-start: 1px 1px 2px rgb(0 0 0 / 0.6);
+  --text-shadow-logon: 2px 2px 3px rgb(10 25 90 / 0.5);
+
+  --animate-boot-bar: boot-bar 2s linear infinite;
+
+  /* the blocks start just off the left of the bar and finish just past its right */
+  @keyframes boot-bar {
+    from {
+      left: 0;
+      translate: -100%;
+    }
+    to {
+      left: 100%;
+      translate: 0;
+    }
+  }
+}
+
+/* inline so the sizes follow the spacing where they are used and scale with xp-screen */
+@theme inline {
+  --text-logon-small: calc(var(--spacing) * 2.75);
+  --text-logon-name: calc(var(--spacing) * 4.5);
+  --text-logon-large: calc(var(--spacing) * 4.75);
+  --text-logon-welcome: calc(var(--spacing) * 11.5);
+  --text-boot-corner: calc(var(--spacing) * 4);
+  --text-boot-name: calc(var(--spacing) * 5.25);
+}
+
+/* makes tailwind's 4px spacing unit 4 xp pixels scaled to the screen and stops at 1.5 times */
+@utility xp-screen {
+  --spacing: min(100dvh / 150, 100vw / 200, 6px);
 }
 
 @utility button-reset {
@@ -149,6 +193,57 @@
 
 @utility bg-task-pane-header {
   background-image: linear-gradient(to right, #fff 50%, #c6d3f7);
+}
+
+/* xp's blocks have nine rows of one dark, one mid, two light, two mid and three dark */
+@utility bg-boot-bar-block {
+  background-image: linear-gradient(
+    #2335c8 11%,
+    #5779ef 11% 22%,
+    #88a0f0 22% 44%,
+    #5779ef 44% 67%,
+    #2335c8 67%
+  );
+}
+
+@utility bg-logon-stage {
+  background-image: radial-gradient(19.5% 42.5% at 10% 22.5%, #9cc0e9, #5a7edc);
+}
+
+@utility bg-logon-header-rule {
+  background-image: linear-gradient(
+    to right,
+    #5075d3,
+    #89a7e8 11%,
+    #c7ddff 26%,
+    #acc6f6 51%,
+    #8dabeb 66%,
+    #6e90e0 81%,
+    #5479d6
+  );
+}
+
+@utility bg-logon-footer-rule {
+  background-image: linear-gradient(
+    to right,
+    #0c3a9a,
+    #7a656c 11%,
+    #eb923d 21%,
+    #f99737 26%,
+    #ed923b 36%,
+    #bd7f4f 51%,
+    #7a656a 66%,
+    #3a4c86 81%,
+    #0c3a9a
+  );
+}
+
+@utility bg-logon-footer {
+  background-image: linear-gradient(to right, #3833ac, #1c31a4, #00309c);
+}
+
+@utility bg-logon-tile {
+  background-image: linear-gradient(to right, #1242a6, #2955b8 50%, transparent);
 }
 
 @utility xp-button {
