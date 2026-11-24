@@ -7,7 +7,12 @@ export function Desktop() {
   return (
     <main className="flex h-dvh flex-col">
       <div className="bg-desktop relative flex-1 overflow-hidden">
-        <img src={wallpaper} alt="" className="absolute inset-0 size-full object-cover" />
+        <img
+          src={wallpaper}
+          alt=""
+          fetchPriority="high"
+          className="absolute inset-0 size-full object-cover"
+        />
         <DesktopIcons />
         <DesktopWindows />
       </div>

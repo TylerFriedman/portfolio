@@ -26,6 +26,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: 'welcome' })).toBeInTheDocument();
     expect(playSpy).toHaveBeenCalledOnce();
     await act(() => vi.advanceTimersByTimeAsync(1500));
+    await act(() => vi.dynamicImportSettled());
     expect(screen.getByRole('list', { name: 'Desktop' })).toBeInTheDocument();
   });
 
@@ -53,6 +54,7 @@ describe('App', () => {
     await useSessionStore.persist.rehydrate();
     render(<App />);
 
+    await act(() => vi.dynamicImportSettled());
     expect(screen.getByRole('list', { name: 'Desktop' })).toBeInTheDocument();
   });
 });

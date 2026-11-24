@@ -4,7 +4,34 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tyler Friedman | Portfolio</title>
+    <title>Tyler Friedman | Software Developer</title>
+    <meta
+      name="description"
+      content="Tyler Friedman is a software developer building production web apps in React and TypeScript. Explore his projects and resume on a working Windows XP desktop."
+    />
+    <!-- the boot logo is the largest thing on screen so it downloads alongside the script -->
+    <link
+      rel="preload"
+      as="image"
+      href="/src/assets/portfolio-logo.webp"
+      imagesrcset="/src/assets/portfolio-logo.webp 1x, /src/assets/portfolio-logo@2x.webp 2x"
+      fetchpriority="high"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Tyler Friedman",
+        "jobTitle": "Software Developer",
+        "worksFor": { "@type": "Organization", "name": "Sunstone Logistic Systems" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Varsity College" },
+        "knowsAbout": ["React", "TypeScript", "Next.js", "Tailwind CSS", "TanStack Query"],
+        "sameAs": [
+          "https://github.com/TylerFriedman",
+          "https://www.linkedin.com/in/tyler-friedman03/"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

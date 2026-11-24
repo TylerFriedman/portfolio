@@ -1,0 +1,19 @@
+# Tyler Friedman
+
+> Software developer at Sunstone Logistic Systems building production web apps in React and TypeScript. Honours graduate in Computer and Information Sciences with an 85% average after a 90.5% average in his Application Development degree.
+
+Tyler builds features end to end from the UI down to the API calls. His work includes complex forms with validation and bulk editing, data-heavy screens that stay in sync with the server and interactive views like a Gantt chart and a map. He writes unit tests with Vitest and Testing Library and documents shared components in Storybook. He built this portfolio from scratch as a working Windows XP desktop.
+
+Skills: TypeScript, React, Next.js, Tailwind CSS, TanStack Query, Zustand, React Hook Form, Zod, Node.js, Vitest and Storybook.
+
+## Profiles
+
+- [GitHub](https://github.com/TylerFriedman): his code and projects
+- [LinkedIn](https://www.linkedin.com/in/tyler-friedman03/): his work history and contact
+
+## Projects
+
+- [Alleysway](https://github.com/TylerFriedman/Alleysway-website): a booking website and Android app for a real gym, built in a team of 5
+- [Fusion](https://github.com/TylerFriedman/Fusion): an Android recipe app for planning meals and shopping lists, built in a team of 5
+- [ClockIT](https://github.com/TylerFriedman/ClockIT): an Android time tracker for students, built in a team of 4
+- [Portfolio](https://github.com/TylerFriedman/portfolio): this website, a Windows XP desktop in the browser

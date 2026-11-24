@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import portfolioLogo from '../../assets/portfolio-logo.webp';
+import { PortfolioLogo } from '../portfolio-logo/portfolio-logo';
 
 interface BootScreenProps {
   userName: string;
@@ -21,7 +21,11 @@ export function BootScreen({ userName, onSkip }: Readonly<BootScreenProps>) {
 
   return (
     <main className="md:xp-screen relative flex h-dvh flex-col items-center justify-center gap-17 bg-black text-white select-none">
-      <img src={portfolioLogo} alt={`${userName} Portfolio XP`} className="w-70 max-md:w-60" />
+      <PortfolioLogo
+        alt={`${userName} Portfolio XP`}
+        fetchPriority="high"
+        className="w-70 max-md:w-60"
+      />
       {/* screen readers get a real progress element and the drawn bar is for looks */}
       <progress aria-label="Starting up" className="sr-only" />
       <div

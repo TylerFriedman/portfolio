@@ -1,5 +1,5 @@
 import turnOffIcon from '../../assets/icons/turn-off.webp';
-import portfolioLogo from '../../assets/portfolio-logo.webp';
+import { PortfolioLogo } from '../portfolio-logo/portfolio-logo';
 
 interface LogonScreenProps {
   userName: string;
@@ -29,7 +29,7 @@ export function LogonScreen({
             <h1 className="text-shadow-logon text-logon-welcome font-medium italic">welcome</h1>
           ) : (
             <>
-              <img src={portfolioLogo} alt="" className="mb-5 w-37.5 max-md:mb-0 max-md:w-52" />
+              <PortfolioLogo alt="" className="mb-5 w-37.5 max-md:mb-0 max-md:w-52" />
               <h1 className="font-logon-book text-logon-large max-md:sr-only">
                 To begin, click your user name
               </h1>

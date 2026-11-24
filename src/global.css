@@ -18,6 +18,8 @@
   --font-logon-small: Tahoma, sans-serif;
   --font-logo: Helvetica, Arial, sans-serif;
 
+  --aspect-logo: 452 / 252;
+
   --color-desktop: #004e98;
   --color-highlight: #316ac5;
   --color-taskbar-button: #3c81f3;
